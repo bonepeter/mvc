@@ -1,0 +1,44 @@
+> install.php
+
+uninstall.php ?
+
+---------- DONE ----------
+
+Done. fitnesse installed, but still need more detail to try
+(http://192.168.0.112:8086/FrontPage.TestA?edit)
+
+Done. web base root redirect to index/view
+
+Done. template link to css, js problem.
+
+Done. development .htaccess not update? (Updated)
+
+Done. if no request action in index.php -> error
+
+Done. Add readme to help build the deployment environment
+
+Done. .htaccess path need to config for each server (Solved)
+
+Done. Found link security problems
+
+Done. Add .htaccess to app, config and lib directory
+
+Done. How to rollback description
+
+Done. Add config file
+
+Done. Setup template system (Smarty)
+
+Done. Controller need to pass data array to view
+
+Done. Create a view factory
+
+Done. DbController: if a database action requested, if not model created, create a new model according to the controller name
+
+Done. AppController: rename to DbController
+
+Done. Create TestModel class, make it usable in a browser
+
+Done. Route the http request to a controller
+
+Done. Run by browser on development machine
