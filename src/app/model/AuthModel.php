@@ -1,20 +1,19 @@
 <?php
 
-namespace lib\framework;
+namespace app\model;
 
-require_once 'AutoLoader.php';
+require_once '../lib/framework/main.php';
 
-use app\model\UserModel;
-use lib\framework\session\Session;
+use app\model\User;
 use app\exception\RecordNotFoundException;
 use app\exception\RegistrationFailException;
 
-class Auth {
+class AuthModel {
 
 	private $user;
 	private $session;
 
-	public function __construct(UserModel $user, Session $session) {
+	public function __construct(UserModel $user, session\Session $session) {
 		$this->user = $user;
 		$this->session = $session;
 	}

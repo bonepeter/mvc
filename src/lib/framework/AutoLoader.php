@@ -26,8 +26,6 @@ class AutoLoader
         $requirePath = __DIR__ . '/../../' . $phpFile . '.php';
         if (is_readable($requirePath)) {
             require_once $requirePath;
-        } else {
-            exit;
         }
     }
 }

@@ -1,14 +1,9 @@
 <?php
-/**
- * Project: framework
- * User: peter
- * Date: 20140914
- */
 
 namespace lib\framework;
 
 use \PDO;
-use app\exception\DbCannotUpdateException;
+use lib\framework\exception\DbCannotUpdateException;
 
 class Db {
 

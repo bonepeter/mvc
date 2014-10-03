@@ -17,10 +17,8 @@ class ViewFactory
 {
     public static function makeView($name) {
         switch (strtolower($name)) {
-            case 'test':
-                return new TestView();
-            case 'testsmarty':
-                return new TestSmartyView();
+            case 'smartytemplate':
+                return new SmartyTemplateView();
             default:
                 throw new RuntimeException('No Object found');
         }

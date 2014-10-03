@@ -21,8 +21,14 @@ class DbModelFactory
     public static function makeDbModel($name) {
         $db = Helper::createDb(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         switch (strtolower($name)) {
-            case 'test':
-                return new TestDbModel($db);
+            case 'auth':
+                $user = new UserModel($db);
+                $session = new \app\model\session\PhpSession();
+                return new AuthModel($user, $session);
+            case 'user':
+                return new UserModel($db);
+            case 'log':
+                return new LogModel($db);
             default:
                 throw new RuntimeException('No Object found');
         }

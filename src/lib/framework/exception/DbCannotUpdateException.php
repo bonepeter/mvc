@@ -1,11 +1,6 @@
 <?php
-/**
- * Project: framework
- * User: peter
- * Date: 20140914
- */
 
-namespace app\exception;
+namespace lib\framework\exception;
 
 use Exception;
 

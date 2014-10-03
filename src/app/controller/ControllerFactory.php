@@ -17,10 +17,10 @@ class ControllerFactory
 {
     public static function makeController($name) {
         switch (strtolower($name)) {
-            case 'test':
-                return new TestController();
             case 'index':
                 return new IndexController();
+            case 'auth':
+                return new AuthController();
             default:
                 throw new RuntimeException('No Object found');
         }

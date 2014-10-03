@@ -37,16 +37,3 @@ CREATE TABLE User (
 
 INSERT INTO User SET User_Username = 'peter', User_Password = SHA('peter'), User_DisplayName = 'Ken', User_Level = 2;
 INSERT INTO User SET User_Username = 'admin', User_Password = SHA('admin'), User_DisplayName = 'Admin', User_Level = 1;
-
-
--- Test --
-
-DROP TABLE IF EXISTS Test;
-
-CREATE TABLE Test (
-  Test_Id INT unsigned NOT NULL auto_increment, PRIMARY KEY (Test_Id),
-  Test_Field1 VARCHAR(100) NOT NULL,
-  User_CreateDate timestamp DEFAULT CURRENT_TIMESTAMP
-) COLLATE utf8_unicode_ci;
-
-INSERT INTO Test SET Test_Field1 = 'v1';

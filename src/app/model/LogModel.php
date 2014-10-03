@@ -18,9 +18,8 @@ class LogModel extends DbModel {
         $this->colsName = array('Log_Id', 'Log_Type', 'Log_Message');
     }
 
-    public function addLog($info, $message) {
+    public function log($info, $message) {
         $data = array('Log_Type' => $info, 'Log_Message' => $message);
         return $this->add($data);
     }
-
 }

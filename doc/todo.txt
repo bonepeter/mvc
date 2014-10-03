@@ -2,7 +2,15 @@
 
 uninstall.php ?
 
+
+
 ---------- DONE ----------
+
+
+Done. remove else part from autoload function so that if class file not found, script can continue
+
+
+
 
 Done. fitnesse installed, but still need more detail to try
 (http://192.168.0.112:8086/FrontPage.TestA?edit)
