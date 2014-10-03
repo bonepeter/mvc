@@ -8,7 +8,7 @@ ini_set("display_errors", 1);
 //error_reporting(0);
 //ini_set("display_errors", 0);
 
-define('WEB_BASE_PATH', '/framework/src/');
+//define('WEB_BASE_PATH', '/framework/src/');
 define('SMARTY_TEMPLATE_PATH', '/var/www/smarty/');
 
 define('DB_HOST', 'localhost');

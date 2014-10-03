@@ -10,6 +10,7 @@ namespace app\view;
 use Smarty;
 
 require_once __DIR__ . '/../../config/config.php';
+require_once '/usr/local/lib/php/Smarty/Smarty.class.php';
 
 class SmartyTemplate
 {

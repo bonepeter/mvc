@@ -5,4 +5,3 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)/css/((.*).css)$ %{ENV:TEMPLATE_URL}/css/$2
 RewriteRule ^(.*)/js/((.*).js)$ %{ENV:TEMPLATE_URL}/js/$2
 RewriteRule ^(.*)/img/((.*).(png|jpg|gif))$ %{ENV:TEMPLATE_URL}/img/$2
-RewriteRule !\.(js|gif|jpg|png|css)$ html/index.php

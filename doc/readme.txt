@@ -37,7 +37,7 @@ Create Mysql Database and User
 Project config
 ==============
 - Modify config/config.php
-- Modify src/.htaccess
+- Modify src/.htaccess (TEMPLATE_URL)
 
 
 Install Smarty for Template
