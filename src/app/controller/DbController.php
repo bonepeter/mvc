@@ -17,4 +17,11 @@ abstract class DbController extends Controller
         $name = empty($name) ? $this->getName() : $name;
         return DbModelFactory::makeDbModel($name);
     }
+
+    protected function log($type, $message)
+    {
+        $log = DbModelFactory::makeDbModel('Log');
+        $log->log($type, $message);
+    }
+
 } 

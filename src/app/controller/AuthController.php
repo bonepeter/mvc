@@ -18,20 +18,23 @@ class AuthController extends DbController
     public function login($username = '', $password = '') {
         $auth = DbModelFactory::makeDbModel('Auth');
         $auth->login($username, $password);
-        if ($auth->isLogin()) {
-            HttpHelper::redirect('index/page');
-        } else {
-            HttpHelper::redirect('auth/loginForm');
-        }
+        $this->log('Auth', 'Login: ' . $username);
+        $this->redirect($auth->isLogin());
     }
 
     public function logout() {
-        $auth = Creator::createAuth();
+        $auth = DbModelFactory::makeDbModel('Auth');
+        $username = $auth->getUsername();
         $auth->logout();
-        if ($auth->isLogin()) {
-            HttpHelper::redirect('index/page');
+        $this->log('Auth', 'Logout: ' . $username);
+        $this->redirect($auth->isLogin());
+    }
+
+    private function redirect($isLogin) {
+        if ($isLogin) {
+            HttpHelper::redirect('index.php');
         } else {
-            HttpHelper::redirect('auth/loginForm');
+            HttpHelper::redirect('login_form.php');
         }
     }
 

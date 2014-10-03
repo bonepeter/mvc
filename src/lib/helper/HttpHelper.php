@@ -2,12 +2,10 @@
 
 namespace lib\helper;
 
-require_once '../config/config.php';
-
 class HttpHelper
 {
     public static function redirect($url) {
-        header('Location: ' . WEB_BASE_PATH . $url);
+        header('Location: ' .  $url);
     }
 
     public static function getRequest($varName, $type = 'get') {
