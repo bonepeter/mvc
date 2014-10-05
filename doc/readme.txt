@@ -30,14 +30,6 @@ Replace _framework_ with your project name
 
 Create Mysql Database and User
 ==============================
-- Modify createDatabase.sql
-- Execute createDatabase.sql
-
-
-Project config
-==============
-- Modify config/config.php
-- Modify src/.htaccess (TEMPLATE_URL)
 
 
 Install Smarty for Template

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# ========== Setting Start ==========
+
 # Release Number
 releaseNo=001
 
@@ -18,13 +20,19 @@ dbUser=frameworkdeployer
 dbPass=frameworkpass
 
 serverSsh=${serverUser}@${serverHost}
+
+# if server authenticated by public/private key
 #sshCmd="ssh $serverSsh"
 #scpCmd=scp
+
+# if server authenticated by password
 sshCmd="sshpass -p $serverPass ssh $serverSsh"
 scpCmd="sshpass -p $serverPass scp"
 
 # Local Settings
 gitDir=git
+
+# ========== Setting End ==========
 
 # Script start...
 echo "Deploy Release $releaseNo ..."
@@ -37,7 +45,7 @@ git clone $gitRespository $gitDir/
 
 echo "Zip the upload code..."
 cd $gitDir/src
-tar -cvf ../deploy.tar .
+tar -cf ../deploy.tar .
 mv ../deploy.tar ../..
 cd ../..
 
@@ -53,7 +61,8 @@ rm deploy.tar
 echo "Unzip files at the server..."
 $sshCmd "cd $releaseDir$releaseNo; tar -xvf deploy.tar; rm deploy.tar"
 echo "Update server config files..."
-$sshCmd "cd $releaseDir; cp deploy/conf/.htaccess $releaseNo; cp deploy/conf/config/config.php $releaseNo/config/config.php"
+#$sshCmd "cd $releaseDir; cp deploy/conf/.htaccess $releaseNo; cp deploy/conf/config/config.php $releaseNo/config/config.php"
+$sshCmd "cd $releaseDir; cp deploy/conf/config/config.php $releaseNo/config/config.php"
 
 echo "Upload Database Patch..."
 if [ -f "git/db/patch$releaseNo.sql" ]

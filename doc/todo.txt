@@ -2,7 +2,7 @@
 
 uninstall.php ?
 
-
+create a test directory, move fitnesse and unitTest to it
 
 ---------- DONE ----------
 
