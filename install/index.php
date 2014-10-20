@@ -101,6 +101,8 @@ sudo adduser deployer<br />
 cd $htmlDir<br />
 sudo mkdir ${projName}Release<br />
 sudo chown deployer:deployer ${projName}Release<br />
+sudo chgrp deployer .<br />
+sudo chmod g+w .<br />
 ==========</code><br />
 
 <p>-> Login as deployer:</p>
@@ -198,41 +200,3 @@ EOT;
         echo sprintf('<p>DONE</p>', $url);
     }
 }
-
-//Class DB
-//{
-//    private $pdo;
-//
-//    public function __construct($host, $user, $pass, $dbName)
-//    {
-//        $this->pdo = $this->createMysqlPdo($host, $user, $pass, $dbName);
-//    }
-//
-//    public function isConnected()
-//    {
-//        return ! is_null($this->pdo);
-//    }
-//
-//    public function executeSql($sql)
-//    {
-//        try {
-//            $stmt = $this->pdo->prepare($sql);
-//            $stmt->execute();
-//            return true;
-//        } catch (PDOException $e) {
-//            return false;
-//        }
-//    }
-//
-//    private function createMysqlPdo($host, $user, $pass, $dbName)
-//    {
-//        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8', $host, $dbName);
-//        try {
-//            $pdo = new \PDO($dsn, $user, $pass);
-//            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//        } catch (PDOException $e) {
-//            $pdo = null;
-//        }
-//        return $pdo;
-//    }
-//}

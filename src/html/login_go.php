@@ -10,5 +10,5 @@ use lib\helper\HttpHelper;
 $username = HttpHelper::getRequest('username', 'post');
 $password = HttpHelper::getRequest('password', 'post');
 
-$auth = ControllerFactory::makeController('Auth');
-$auth->login($username, $password);
+$controller = ControllerFactory::makeController('Auth');
+$controller->login($username, $password);

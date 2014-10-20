@@ -2,8 +2,6 @@
 
 namespace app\model;
 
-//require_once __DIR__ . '/../helper/autoload.lib.php';
-
 use lib\framework\Db;
 
 class UserModel extends DbModel {

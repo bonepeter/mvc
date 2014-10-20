@@ -2,36 +2,36 @@
 
 namespace app\controller;
 
-use app\model\DbModelFactory;
 use lib\helper\HttpHelper;
+use app\view\ViewFactory;
 
 class AuthController extends DbController
 {
     public function loginForm() {
-        $view = $this->getView('SmartyTemplate');
-        echo $view->render('login');
+        $view = ViewFactory::makeView('SmartyTemplate');
+        echo $view->render('login_form');
     }
 
     public function login($username = '', $password = '') {
-        $auth = DbModelFactory::makeDbModel('Auth');
-        $auth->login($username, $password);
+        $model = $this->makeModel('Auth');
+        $model->login($username, $password);
         $this->log('Auth', 'Login: ' . $username);
-        $this->redirect($auth->isLogin());
+        $this->redirect($model->isLogin());
     }
 
     public function logout() {
-        $auth = DbModelFactory::makeDbModel('Auth');
-        $username = $auth->getUsername();
-        $auth->logout();
+        $model = $this->makeModel('Auth');
+        $username = $model->getUsername();
+        $model->logout();
         $this->log('Auth', 'Logout: ' . $username);
-        $this->redirect($auth->isLogin());
+        $this->redirect($model->isLogin());
     }
 
     private function redirect($isLogin) {
         if ($isLogin) {
             HttpHelper::redirect('index.php');
         } else {
-            HttpHelper::redirect('login_form.php');
+            HttpHelper::redirect('login.php');
         }
     }
 

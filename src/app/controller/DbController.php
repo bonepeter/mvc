@@ -12,6 +12,17 @@ use lib\framework\Controller;
 
 abstract class DbController extends Controller
 {
+    private $model = array();
+
+    protected function makeModel($modelName)
+    {
+        if (! isset($this->model[$modelName]))
+        {
+            $this->model[$modelName] = DbModelFactory::makeDbModel($modelName);
+        }
+        return $this->model[$modelName];
+    }
+
     protected function getDbModel($name = '')
     {
         $name = empty($name) ? $this->getName() : $name;

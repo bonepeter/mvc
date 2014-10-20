@@ -23,7 +23,11 @@ serverSsh=${serverUser}@${serverHost}
 
 # if server authenticated by public/private key
 #sshCmd="ssh $serverSsh"
-#scpCmd=scp
+#scpCmd="scp"
+
+# if server authenticated by public/private key (including the key file)
+#sshCmd="ssh -i /path/to/private/key/private.key $serverSsh"
+#scpCmd="scp -i /path/to/private/key/private.key"
 
 # if server authenticated by password
 sshCmd="sshpass -p $serverPass ssh $serverSsh"
@@ -53,7 +57,7 @@ echo "Clear server release directory..."
 $sshCmd "cd $releaseDir; rm -rf $releaseNo; mkdir $releaseNo"
 
 echo "Upload zip files to server..."
-$scpCmd deploy.tar $serverSsh:$releaseDir$releaseNo
+$scpCmd deploy.tar $serverSsh:${releaseDir}$releaseNo
 
 echo "Delete local deploy.tar ..."
 rm deploy.tar
@@ -68,7 +72,7 @@ echo "Upload Database Patch..."
 if [ -f "git/db/patch$releaseNo.sql" ]
 then
 
-	$scpCmd git/db/*$releaseNo.sql $serverSsh:${releaseDir}deploy
+	$scpCmd git/db/*${releaseNo}.sql $serverSsh:${releaseDir}deploy
 	echo "Run Database Patch..."
 	$sshCmd "cd ${releaseDir}deploy; mysql -u $dbUser -p$dbPass $dbDatabase < patch$releaseNo.sql; rm patch$releaseNo.sql"
 	echo "Delete Database Patch..."
@@ -78,7 +82,7 @@ else
 fi
 
 echo "Change symbolic link to new Release..."
-$sshCmd "ln -sfn $releaseDir$releaseNo $htmlLink"
+$sshCmd "ln -sfn ${releaseDir}$releaseNo $htmlLink"
 
 echo "Clear Local Git Directory..."
 rm -rf $gitDir

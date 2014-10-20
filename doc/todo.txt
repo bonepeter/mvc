@@ -1,16 +1,17 @@
-> install.php
-
-uninstall.php ?
 
 create a test directory, move fitnesse and unitTest to it
 
 ---------- DONE ----------
 
+Done. add renderWithData function to SmartyTemplateView.php
+Done. modified: deploy.sh
+Done. modified: install/index.php
+Done. add: src/index.php
+Done. add makeModel function to DBController.php
+Done. DateHelper: strtotime() timezone problem
+Done. Login, Logout pages
 
 Done. remove else part from autoload function so that if class file not found, script can continue
-
-
-
 
 Done. fitnesse installed, but still need more detail to try
 (http://192.168.0.112:8086/FrontPage.TestA?edit)
