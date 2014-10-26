@@ -3,6 +3,8 @@ create a test directory, move fitnesse and unitTest to it
 
 ---------- DONE ----------
 
+Done. fixed isLogin.inc.php bug
+
 Done. add renderWithData function to SmartyTemplateView.php
 Done. modified: deploy.sh
 Done. modified: install/index.php

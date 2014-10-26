@@ -8,6 +8,6 @@ use app\model\DbModelFactory;
 
 $auth = DbModelFactory::makeDbModel('Auth');
 if(!$auth->isLogin()) {
-	$url = 'login_form.php';
+	$url = 'login.php';
 	header('Location: ' . $url);
 }
