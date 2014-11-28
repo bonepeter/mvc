@@ -28,7 +28,7 @@ Code check: (Run in server)
 
 
 ================
-FitNesse Testing
+Fitnesse Testing
 ================
 
 -> Download least release from http://fitnesse.org/FitNesseDownload to /tmp

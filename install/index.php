@@ -1,6 +1,6 @@
 <?php
 
-require_once '../src/lib/framework/main.php';
+require_once  __DIR__ . '/../src/lib/framework/main.php';
 
 use lib\helper\HttpHelper;
 

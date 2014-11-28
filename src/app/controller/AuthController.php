@@ -89,7 +89,6 @@ class AuthController
 
     private function log($type, $message)
     {
-        //$log = DbModelFactory::makeDbModel('Log');
         $db = Helper::createDb(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         $log = new LogDb($db);
         $log->log($type, $message);

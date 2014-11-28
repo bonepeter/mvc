@@ -5,6 +5,7 @@ namespace app\view;
 use Smarty;
 
 require_once __DIR__ . '/../../config/config.php';
+
 require_once SMARTY_LIB_PATH;
 
 class SmartyTemplate

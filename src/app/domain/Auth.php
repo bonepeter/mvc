@@ -5,7 +5,6 @@ namespace app\domain;
 use app\db\UserDb;
 use lib\framework\Helper;
 
-
 class Auth {
 
 	private $user;
@@ -29,37 +28,6 @@ class Auth {
 			return false;
 		}
 	}
-
-//	private function setLogin($rowUserData) {
-//		$this->session->setVar('userId', $rowUserData['User_Id']);
-//		$this->session->setVar('username', $rowUserData['User_Username']);
-//		$this->session->setVar('userDisplayName', $rowUserData['User_DisplayName']);
-//	}
-
-//	private function setLogout() {
-////		$this->session->setVar('userId', '');
-////		$this->session->setVar('username', '');
-////		$this->session->setVar('userDisplayName', '');
-//
-//		//session_destroy();
-//		//setcookie( session_name(), '', time() - 300, '/', '', 0 );
-//	}
-
-//	public function logout() {
-//		$this->setLogout();
-//	}
-//
-//	public function getUserDisplayName() {
-//		return $this->session->getVar('userDisplayName');
-//	}
-//
-//	public function getUsername() {
-//		return $this->session->getVar('username');
-//	}
-//
-//	public function getUserId() {
-//		return $this->session->getVar('userId');
-//	}
 
     // TODO:
 //	public function registration($userInfo) {
@@ -95,27 +63,6 @@ class Auth {
 ////			include_once( 'sendMail.lib.php' );
 ////			sendActivateMail($email, $activateLink);
 ////			exit;
-////		}
-//	}
-
-//	public function isLogin() {
-//		$sessionUserId = $this->session->getVar('userId');
-//		if (empty($sessionUserId)) {
-//			return false;
-//		}
-//
-//		//temp before a more security way
-//		//
-//		// check also the ip
-//		//
-//		//$this->user->setUserByUsername($sessionUserId);
-//
-//		return true;
-//		//TODO need a more security way
-////		if ($sessionUserId == $this->user->getUserId()) {
-////			return true;
-////		} else {
-////			return false;
 ////		}
 //	}
 

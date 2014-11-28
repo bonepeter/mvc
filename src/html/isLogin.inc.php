@@ -2,7 +2,7 @@
 
 namespace html;
 
-require_once '../lib/framework/main.php';
+require_once __DIR__ . '/../lib/framework/main.php';
 
 use app\controller\AuthController;
 

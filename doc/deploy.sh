@@ -42,39 +42,39 @@ gitDir=git
 echo "Deploy Release $releaseNo ..."
 
 echo "Clear existing git directory..."
-rm -rf $gitDir/
+rm -rf ${gitDir}/
 
 echo "Get respository..."
-git clone $gitRespository $gitDir/
+git clone ${gitRespository} ${gitDir}/
 
 echo "Zip the upload code..."
-cd $gitDir/src
+cd ${gitDir}/src
 tar -cf ../deploy.tar .
 mv ../deploy.tar ../..
 cd ../..
 
 echo "Clear server release directory..."
-$sshCmd "cd $releaseDir; rm -rf $releaseNo; mkdir $releaseNo"
+${sshCmd} "cd $releaseDir; rm -rf $releaseNo; mkdir $releaseNo"
 
 echo "Upload zip files to server..."
-$scpCmd deploy.tar $serverSsh:${releaseDir}$releaseNo
+${scpCmd} deploy.tar ${serverSsh}:${releaseDir}${releaseNo}
 
 echo "Delete local deploy.tar ..."
 rm deploy.tar
 
 echo "Unzip files at the server..."
-$sshCmd "cd $releaseDir$releaseNo; tar -xvf deploy.tar; rm deploy.tar"
+${sshCmd} "cd $releaseDir$releaseNo; tar -xvf deploy.tar; rm deploy.tar"
 echo "Update server config files..."
 #$sshCmd "cd $releaseDir; cp deploy/conf/.htaccess $releaseNo; cp deploy/conf/config/config.php $releaseNo/config/config.php"
-$sshCmd "cd $releaseDir; cp deploy/conf/config/config.php $releaseNo/config/config.php"
+${sshCmd} "cd $releaseDir; cp deploy/conf/config/config.php $releaseNo/config/config.php"
 
 echo "Upload Database Patch..."
 if [ -f "git/db/patch$releaseNo.sql" ]
 then
 
-	$scpCmd git/db/*${releaseNo}.sql $serverSsh:${releaseDir}deploy
+	${scpCmd} git/db/*${releaseNo}.sql ${serverSsh}:${releaseDir}deploy
 	echo "Run Database Patch..."
-	$sshCmd "cd ${releaseDir}deploy; mysql -u $dbUser -p$dbPass $dbDatabase < patch$releaseNo.sql; rm patch$releaseNo.sql"
+	${sshCmd} "cd ${releaseDir}deploy; mysql -u $dbUser -p$dbPass $dbDatabase < patch$releaseNo.sql; rm patch$releaseNo.sql"
 	echo "Delete Database Patch..."
 
 else
@@ -82,10 +82,10 @@ else
 fi
 
 echo "Change symbolic link to new Release..."
-$sshCmd "ln -sfn ${releaseDir}$releaseNo $htmlLink"
+${sshCmd} "ln -sfn ${releaseDir}$releaseNo $htmlLink"
 
 echo "Clear Local Git Directory..."
-rm -rf $gitDir
+rm -rf ${gitDir}
 
 echo "Deployment Done"
 

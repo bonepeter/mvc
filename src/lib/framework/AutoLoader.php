@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: peter
- * Date: 7/9/14
- */
 
 namespace lib\framework;
 
