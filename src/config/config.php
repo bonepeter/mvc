@@ -10,7 +10,8 @@ ini_set("display_errors", 1);
 
 define('PROJECT_NAME', 'mvc');
 
-define('HTML_DIR', '/var/www/html/');
+define('HTML_DIR', '/Applications/mampstack-5.4.34-0/apache2/htdocs/');
+//define('HTML_DIR', '/var/www/html/');
 define('SMARTY_WEB_PATH', '/mvcTemplate/');
 define('SMARTY_TEMPLATE_PATH', HTML_DIR . SMARTY_WEB_PATH);
 define('SMARTY_LIB_PATH', '/Applications/mampstack-5.4.34-0/frameworks/smarty/libs/Smarty.class.php');

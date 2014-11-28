@@ -95,7 +95,8 @@ RewriteCond %{REQUEST_FILENAME} -f<br />
 RewriteRule !\.(js|gif|jpg|png|css)$ - [F]<br />
 >>>>> frameworkTemplate/.htaccess <<<<<<br />
 
-vi smarty/templates/index.tpl<br />
+- Download ZIP mvcTemplate from <a href="https://github.com/bonepeter/mvcTemplate" target="_blank">github.com</a><br />
+- Unzip and copy to ${smartyTemplate}/templates/<br />
 
 <p>========== Reference ==========</p>
 - <a href="http://www.smarty.net/download" target="_blank">Download Smarty</a><br />
