@@ -38,7 +38,8 @@ function index()
 
 function showRequirement()
 {
-    echo 'Requirement: Apache, php 5, Smarty';
+    echo '<p>Requirement: Apache, php 5, Smarty</p>';
+    echo '- Setup file src/config/config.php<br />';
     $output = <<< EOT
 <form action="?action=smarty" method="post">
 <p>Apache run user: <input type="text" name="apacheUser" value="www-data"></p>

@@ -1,17 +1,11 @@
 <?php
-/**
- * Project: framework
- * User: peter
- * Date: 20140914
- */
 
 namespace app\view;
 
 use Smarty;
 
-require_once '/usr/local/lib/php/Smarty/Smarty.class.php';
-
 require_once __DIR__ . '/../../config/config.php';
+require_once SMARTY_LIB_PATH;
 
 class SmartyTemplate
 {
