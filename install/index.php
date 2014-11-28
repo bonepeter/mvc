@@ -224,8 +224,14 @@ EOT;
         $this->printContinueLink();
     }
 
-    private function printContinueLink() {
-        $url = "?" . http_build_query($_REQUEST) . '&action=config_form';
-        echo sprintf('<p>DONE</p>', $url);
+    private function printContinueLink()
+    {
+        if ($_SERVER["SERVER_PORT"] != "80") {
+            $host = $_SERVER["SERVER_NAME"] . ':' . $_SERVER["SERVER_PORT"];
+        } else {
+            $host = $_SERVER["SERVER_NAME"];
+        }
+        echo sprintf('<p>DONE</p>');
+        echo sprintf('<p><a href="http://%s/%s">Try the new website</a></p>', $host, PROJECT_NAME);
     }
 }
