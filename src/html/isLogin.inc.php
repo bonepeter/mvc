@@ -4,9 +4,9 @@ namespace html;
 
 require_once '../lib/framework/main.php';
 
-use app\model\DbModelFactory;
+use app\controller\AuthController;
 
-$auth = DbModelFactory::makeDbModel('Auth');
+$auth = new AuthController();
 if(!$auth->isLogin()) {
 	$url = 'login.php';
 	header('Location: ' . $url);

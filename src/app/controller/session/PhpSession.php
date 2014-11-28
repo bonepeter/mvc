@@ -1,6 +1,6 @@
 <?php
 
-namespace app\model\session;
+namespace app\controller\session;
 
 class PhpSession implements Session {
 

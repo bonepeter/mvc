@@ -1,16 +1,18 @@
 <?php
 
-namespace app\model;
+namespace app\db;
 
 use lib\framework\Db;
 
-class UserModel extends DbModel {
-
-	public function __construct(Db $db) {
+class UserDb extends DbTable
+{
+	public function __construct(Db $db)
+    {
 		parent::__construct($db);
 		$this->tableName = 'User';
 		$this->idColName = 'User_Id';
-		$this->colsName = array('User_Username', 'User_Password', 'User_DisplayName');
+		$this->colsName = array('User_Id', 'User_Username', 'User_Password',
+            'User_DisplayName', 'User_Level');
 	}
 
 	public function getUserByUsername($username) {

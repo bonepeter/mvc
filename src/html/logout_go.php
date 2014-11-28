@@ -4,7 +4,7 @@ namespace html;
 
 require_once '../lib/framework/main.php';
 
-use app\controller\ControllerFactory;
+use app\controller\AuthController;
 
-$controller = ControllerFactory::makeController('Auth');
+$controller = new AuthController();
 $controller->logout();

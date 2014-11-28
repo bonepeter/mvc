@@ -1,14 +1,14 @@
 
 create a test directory, move fitnesse and unitTest to it
 
-CRUD a db table
+wip: CRUD a db table
 PDO singleton implementation
-? Make app/domain directory for business logic (? need more research)
-
 
 ---------- DONE ----------
 
 20141128:
+Done. Make app/db directory to handle each table in database
+Done. Make app/domain directory for business logic
 Done: Smart deployment problem: move the smart lib path setup to config.php
 Done. Updated install/index.php: move the install instruction from readme.txt to index.php
 Done. Db table name change to lowercase

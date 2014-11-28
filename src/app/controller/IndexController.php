@@ -2,7 +2,9 @@
 
 namespace app\controller;
 
-class IndexController extends DbController
+use lib\framework\Controller;
+
+class IndexController extends Controller
 {
     public function view() {
         $view = $this->getView('SmartyTemplate');

@@ -1,15 +1,10 @@
 <?php
-/**
- * Project: framework
- * User: peter
- * Date: 20140914
- */
 
-namespace app\model;
+namespace app\db;
 
 use lib\framework\Db;
 
-abstract class DbModel {
+abstract class DbTable {
 
     protected $db = null;
     protected $data = array();

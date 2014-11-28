@@ -4,11 +4,11 @@ namespace html;
 
 require_once '../lib/framework/main.php';
 
-use app\controller\ControllerFactory;
+use app\controller\AuthController;
 use lib\helper\HttpHelper;
 
 $username = HttpHelper::getRequest('username', 'post');
 $password = HttpHelper::getRequest('password', 'post');
 
-$controller = ControllerFactory::makeController('Auth');
+$controller = new AuthController();
 $controller->login($username, $password);
