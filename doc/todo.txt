@@ -1,6 +1,12 @@
 
 create a test directory, move fitnesse and unitTest to it
 
+CRUD a db table
+Db table name change to lowercase
+PDO singleton implementation
+Make aap/domain directory for business logic (? need more research)
+Smart deployment problem
+
 ---------- DONE ----------
 
 Done. fixed isLogin.inc.php bug
