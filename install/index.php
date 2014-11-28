@@ -39,16 +39,26 @@ function index()
 function showRequirement()
 {
     echo 'Requirement: Apache, php 5, Smarty';
+    $output = <<< EOT
+<form action="?action=smarty" method="post">
+<p>Apache run user: <input type="text" name="apacheUser" value="www-data"></p>
+<input type="Submit">
+</form>
+EOT;
+    echo $output;
     echo '<p><a href="?action=smarty">Install Smarty</a></p>';
 }
 
 function smarty()
 {
+    $apacheUser = HttpHelper::getRequest('apacheUser', 'post');
+
     echo '<h1>Install Smarty</h1>';
     $smartyTemplate = SMARTY_TEMPLATE_PATH;
     $output = <<< EOT
 SSH to the server and run this command:<br />
-==========<br />
+
+<p>========== Install and Setup ==========</p>
 cd /tmp<br />
 mkdir smarty<br />
 cd smarty<br />
@@ -56,6 +66,11 @@ wget http://www.smarty.net/files/Smarty-stable.tar.gz<br />
 tar -zxvf Smarty-stable.tar.gz<br />
 sudo mkdir -p /usr/local/lib/php/Smarty<br />
 sudo cp -r Smarty-3.1.18/libs/* /usr/local/lib/php/Smarty<br />
+
+cd /tmp<br />
+rm -rf smarty<br />
+
+<p>========== Setup Template ==========</p>
 sudo mkdir -p ${smartyTemplate}<br />
 cd ${smartyTemplate}<br />
 sudo mkdir templates<br />
@@ -63,16 +78,14 @@ sudo mkdir templates_c<br />
 sudo mkdir cache<br />
 sudo mkdir configs<br />
 sudo chown peter:peter templates<br />
-sudo chown www-data:www-data templates_c<br />
-sudo chown www-data:www-data cache<br />
+sudo chown {$apacheUser}:{$apacheUser} templates_c<br />
+sudo chown {$apacheUser}:{$apacheUser} cache<br />
 sudo chmod 775 templates_c<br />
 sudo chmod 775 cache<br />
-cd /tmp<br />
-rm -rf smarty<br />
 
 cd ${smartyTemplate}<br />
 sudo vi .htaccess<br />
-==========<br />
+
 Add this lines:<br />
 >>>>> frameworkTemplate/.htaccess <<<<<<br />
 Options -Indexes<br />
@@ -82,9 +95,17 @@ RewriteRule !\.(js|gif|jpg|png|css)$ - [F]<br />
 >>>>> frameworkTemplate/.htaccess <<<<<<br />
 
 vi smarty/templates/index.tpl<br />
+
+<p>========== Reference ==========</p>
+- <a href="http://www.smarty.net/download" target="_blank">Download Smarty</a><br />
+- <a href="http://www.smarty.net/quick_install" target="_blank">Quick Install Reference</a><br />
+- Install the template files in /var/www/html/frameworkTemplate/smarty<br />
+==========<br />
 EOT;
     echo $output;
     echo '<p><a href="?action=deploy">Next - Deployment Setup</a></p>';
+
+    printBackLinks();
 }
 
 function deploy()
@@ -122,11 +143,15 @@ cd config<br />
 EOT;
     echo $output;
     echo '<p><a href="?action=createDb_form">Next - Create database</a></p>';
+
+    printBackLinks();
 }
 
 // ---------- Functions ----------
 
-
+function printBackLinks() {
+    echo '<p><a href="javascript:history.back()">Back</a></p>';
+}
 
 // ---------- Class ----------
 
@@ -136,21 +161,20 @@ Class createDatabaseAction
     {
         $output = <<< EOT
 Create database:
-<form action="">
+<form action="?action=createDb_go" method="post">
 <p>Database Host: <input type="text" name="dbHost" value="%s"></p>
 <p>Database Name: <input type="text" name="dbName" value="%s"></p>
 <p>Database Username: <input type="text" name="dbUser" value="%s"></p>
 <p>Database Password: <input type="text" name="dbPass" value="%s"></p>
 <p>Database Deploy Username: <input type="text" name="dbDeployUser" value="%s"></p>
 <p>Database Deploy Password: <input type="text" name="dbDeployPass" value="%s"></p>
-<input type="hidden" name="action" value="createDb_go">
 <input type="Submit">
 </form>
 EOT;
-        $deployUser = HttpHelper::getRequest('dbDeployUser');
-        $deployUser = $deployUser == '' ? PROJECT_NAME . 'deployer' : $deployUser;
-        $deployPass = HttpHelper::getRequest('dbDeployPass');
-        $deployPass = $deployPass == '' ? PROJECT_NAME . 'deployerpass' : $deployPass;
+        $deployUser = HttpHelper::getRequest('dbDeployUser', 'post');
+        $deployUser = $deployUser == '' ? PROJECT_NAME . 'deploy' : $deployUser;
+        $deployPass = HttpHelper::getRequest('dbDeployPass', 'post');
+        $deployPass = $deployPass == '' ? PROJECT_NAME . 'deploypass' : $deployPass;
         echo sprintf($output,
             DB_HOST,
             DB_NAME,
@@ -158,22 +182,28 @@ EOT;
             DB_PASSWORD,
             $deployUser,
             $deployPass);
+
+        printBackLinks();
     }
 
     public function go()
     {
-        $dbHost = HttpHelper::getRequest('dbHost');
-        $dbName = HttpHelper::getRequest('dbName');
-        $dbUser = HttpHelper::getRequest('dbUser');
-        $dbPass = HttpHelper::getRequest('dbPass');
-        $dbDeployUser = HttpHelper::getRequest('dbDeployUser');
-        $dbDeployPass = HttpHelper::getRequest('dbDeployPass');
+        $dbHost = HttpHelper::getRequest('dbHost', 'post');
+        $dbName = HttpHelper::getRequest('dbName', 'post');
+        $dbUser = HttpHelper::getRequest('dbUser', 'post');
+        $dbPass = HttpHelper::getRequest('dbPass', 'post');
+        $dbDeployUser = HttpHelper::getRequest('dbDeployUser', 'post');
+        $dbDeployPass = HttpHelper::getRequest('dbDeployPass', 'post');
 
         $createDatabaseCmd = "CREATE DATABASE $dbName;";
         $createDeployUserCmd = "CREATE USER '$dbDeployUser'@'$dbHost' identified by '$dbDeployPass';";
         $createDeployAccessCmd = "GRANT create, alter, drop, insert on $dbName.* to '$dbDeployUser'@'$dbHost';";
         $createWebUserCmd = "CREATE USER '$dbUser'@'$dbHost' identified by '$dbPass';";
         $createWebUserAccessCmd = "GRANT select, insert, delete, update on $dbName.* to '$dbUser'@'$dbHost';";
+
+        $createOptionalWebUserCmd = "CREATE USER '$dbUser'@'$dbHost' identified by '$dbPass';";
+        $createOptionalWebUserAccessCmd = "GRANT ALL on $dbName.* to '$dbUser'@'$dbHost';";
+
 
         echo 'SSH to the server, run mysql command to create the database:<br />';
         echo <<< EOT
@@ -183,16 +213,15 @@ $createDeployUserCmd<br />
 $createDeployAccessCmd<br />
 $createWebUserCmd<br />
 $createWebUserAccessCmd<br />
+Or<br />
+$createOptionalWebUserCmd<br />
+$createOptionalWebUserAccessCmd<br />
 ==========<br />
 EOT;
-        $this->printFailLinks();
+
+        printBackLinks();
 
         $this->printContinueLink();
-    }
-
-    private function printFailLinks() {
-        $url = "?" . http_build_query($_REQUEST) . '&action=createDb_form';
-        echo "<p></p><a href=\"$url\">Back</a></p>";
     }
 
     private function printContinueLink() {
