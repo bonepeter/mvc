@@ -2,6 +2,7 @@
 create a test directory, move fitnesse and unitTest to it
 
 wip: CRUD a db table
+- move the logic from controller to domain
 PDO singleton implementation
 
 ---------- DONE ----------
