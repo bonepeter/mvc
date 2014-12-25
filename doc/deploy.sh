@@ -5,19 +5,23 @@
 # Release Number
 releaseNo=001
 
+# Project Name
+project=mvc
+
 # Git Respository
-gitRespository=ssh://peter@gitHost/var/git/framework
+gitRespository=ssh://peter@gitHost/var/git/${project}
 
 # Server Settings
 serverHost=hostnameOrIp
+serverPort=22
 serverUser=deployer
 serverPass=password
 
-releaseDir=/var/www/html/frameworkRelease/
-htmlLink=/var/www/html/framework
-dbDatabase=framework
-dbUser=frameworkdeployer
-dbPass=frameworkpass
+releaseDir=/var/www/html/${project}Release/
+htmlLink=/var/www/html/${project}
+dbDatabase=${project}
+dbUser=${project}deployer
+dbPass=${project}pass
 
 serverSsh=${serverUser}@${serverHost}
 
@@ -30,8 +34,8 @@ serverSsh=${serverUser}@${serverHost}
 #scpCmd="scp -i /path/to/private/key/private.key"
 
 # if server authenticated by password
-sshCmd="sshpass -p $serverPass ssh $serverSsh"
-scpCmd="sshpass -p $serverPass scp"
+sshCmd="sshpass -p $serverPass ssh $serverSsh -p ${serverPort}"
+scpCmd="sshpass -p $serverPass scp -P ${serverPort}"
 
 # Local Settings
 gitDir=git
