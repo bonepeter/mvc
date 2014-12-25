@@ -40,9 +40,15 @@ class DbCrudController
     }
 
 
-    public function display($id) {
-
-        $rows = $this->table->getAll();
+    public function display($id, $pageNo = 1)
+    {
+        $where = array();
+        $rowEachPage = 20;
+        if (empty($pageNo))
+        {
+            $pageNo = 1;
+        }
+        $rows = $this->table->getData($where, '', $rowEachPage, $pageNo);
 
         if (empty($id))
         {
@@ -57,7 +63,9 @@ class DbCrudController
         }
 
         $data = array('tableName' => $this->tableName,
-            'cols' => $this->table->getCols(), 'rows' => $rows, 'edit' => $editUser);
+            'cols' => $this->table->getCols(), 'rows' => $rows,
+            'pageTotal' => $this->table->getRowCount() / $rowEachPage,
+            'edit' => $editUser);
 
         $view = new SmartyTemplateView();
         echo $view->renderWithData($data, 'dbtable');

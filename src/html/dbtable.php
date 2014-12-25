@@ -11,10 +11,11 @@ require_once 'isLogin.inc.php';
 
 $table = HttpHelper::getRequest('table', 'get');
 $id = HttpHelper::getRequest('id', 'get');
+$pageNo = HttpHelper::getRequest('page', 'get');
 
 try {
     $controller = new DbCrudController($table);
-    $controller->display($id);
+    $controller->display($id, $pageNo);
 } catch (\Exception $e) {
     echo $e->getMessage();
     exit;

@@ -53,6 +53,12 @@
             </tr>
             {/foreach}
         </table>
+        <p>
+            Page
+            {for $page=1 to $data.pageTotal}
+                | <a href="?table={$data.tableName}&page={$page}#tabs-result">{$page}</a>
+            {/for}
+        </p>
         <p><i>Last Update: {$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}</i></p>
     </div>
 

@@ -1,5 +1,4 @@
 wip: CRUD a db table
-- view in page
 - search
 
 pdo way of running query
@@ -9,6 +8,7 @@ create a test directory, move fitnesse and unitTest to it
 ---------- DONE ----------
 
 20141226:
+Done. CRUD: search result paging
 Done. Fixed Login template bug
 
 20141225:
