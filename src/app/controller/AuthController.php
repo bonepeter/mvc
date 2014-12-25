@@ -4,15 +4,15 @@ namespace app\controller;
 
 use app\db\LogDb;
 use app\domain\Auth;
+use app\view\SmartyTemplateView;
 use lib\framework\Helper;
 use lib\helper\HttpHelper;
-use app\view\ViewFactory;
 use app\controller\session\PhpSession;
 
 class AuthController
 {
     public function loginForm() {
-        $view = ViewFactory::makeView('SmartyTemplate');
+        $view = new SmartyTemplateView();
         echo $view->render('login_form');
     }
 
