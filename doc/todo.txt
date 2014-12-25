@@ -9,6 +9,8 @@ PDO singleton implementation
 ---------- DONE ----------
 
 20141225:
+Done. Remove lib/framework/Controller.php
+Done. Remove ViewFactory.php
 Done. Merge mvcTemplate to mvc
 
 20141128:

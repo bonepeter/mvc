@@ -5,7 +5,7 @@ namespace app\controller;
 use app\db\LogDb;
 use app\db\UserDb;
 use lib\framework\Helper;
-use app\view\ViewFactory;
+use app\view\SmartyTemplateView;
 
 class UserController
 {
@@ -18,7 +18,7 @@ class UserController
     }
 
     public function display($id) {
-        $view = ViewFactory::makeView('SmartyTemplate');
+        $view = new SmartyTemplateView();
         $users = $this->user->getAll();
 
         if (empty($id))

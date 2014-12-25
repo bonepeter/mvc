@@ -2,12 +2,12 @@
 
 namespace app\controller;
 
-use lib\framework\Controller;
+use app\view\SmartyTemplateView;
 
-class IndexController extends Controller
+class IndexController
 {
     public function view() {
-        $view = $this->getView('SmartyTemplate');
+        $view = new SmartyTemplateView();
         echo $view->render('index');
     }
 }
