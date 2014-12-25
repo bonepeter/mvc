@@ -16,18 +16,18 @@ class Db {
         $this->dbh = $dbh;
     }
 
-    public static function createSqliteMemoryPdo() {
-        $pdo = new PDO('sqlite::memory:');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
-    }
-
-    public static function createMysqlPdo($host, $user, $pass, $dbName) {
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8', $host, $dbName);
-        $pdo = new PDO($dsn, $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
-    }
+//    public static function createSqliteMemoryPdo() {
+//        $pdo = new PDO('sqlite::memory:');
+//        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//        return $pdo;
+//    }
+//
+//    public static function createMysqlPdo($host, $user, $pass, $dbName) {
+//        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8', $host, $dbName);
+//        $pdo = new PDO($dsn, $user, $pass);
+//        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//        return $pdo;
+//    }
 
     public function dbh() {
         return $this->dbh;

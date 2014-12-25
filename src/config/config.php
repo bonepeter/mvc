@@ -16,7 +16,7 @@ define('SERVER_HTML_BASE_PATH', '/Applications/mampstack-5.4.34-0/apache2/htdocs
 define('SERVER_SMARTY_LIB_PATH', '/Applications/mampstack-5.4.34-0/frameworks/smarty/libs/Smarty.class.php');
 //define('SERVER_SMARTY_LIB_PATH', '/usr/local/lib/php/Smarty/Smarty.class.php');
 
-define('SERVER_SMARTY_WORKING_PATH', '/mvcTemplates/');
+define('SERVER_SMARTY_WORKING_PATH', '/Applications/mampstack-5.4.34-0/apache2/htdocs/mvcTemplates/');
 
 define('SERVER_SMARTY_TEMPLATES_PATH', '/mvc/src/html/templates/');
 

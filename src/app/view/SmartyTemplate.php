@@ -15,13 +15,12 @@ class SmartyTemplate
 
     public function __construct()
     {
-        $workingDir = SERVER_HTML_BASE_PATH . SERVER_SMARTY_WORKING_PATH;
         $this->templateBaseDir = SERVER_HTML_BASE_PATH . SERVER_SMARTY_TEMPLATES_PATH;
         $this->template = new Smarty();
         $this->template->setTemplateDir($this->templateBaseDir);
-        $this->template->setCompileDir($workingDir . 'templates_c');
-        $this->template->setCacheDir($workingDir . 'cache');
-        $this->template->setConfigDir($workingDir . 'configs');
+        $this->template->setCompileDir(SERVER_SMARTY_WORKING_PATH . 'templates_c');
+        $this->template->setCacheDir(SERVER_SMARTY_WORKING_PATH . 'cache');
+        $this->template->setConfigDir(SERVER_SMARTY_WORKING_PATH . 'configs');
         $this->addData('baseDir', URL_SMARTY_TEMPLATES_PATH);
     }
 

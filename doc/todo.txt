@@ -1,14 +1,17 @@
+wip: CRUD a db table
+- move the logic from controller to domain
+
+pdo way of running query
+
 
 
 create a test directory, move fitnesse and unitTest to it
 
-wip: CRUD a db table
-- move the logic from controller to domain
-PDO singleton implementation
-
 ---------- DONE ----------
 
 20141225:
+Done. Update install.php
+Skip. PDO singleton implementation. Second thought, I don't want to use singleton in that way. If problem found, try moving to a better design.
 Done. Update deploy.sh
 Done. Remove lib/framework/Controller.php
 Done. Remove ViewFactory.php

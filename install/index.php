@@ -43,11 +43,10 @@ function showRequirement()
     $output = <<< EOT
 <form action="?action=smarty" method="post">
 <p>Apache run user: <input type="text" name="apacheUser" value="www-data"></p>
-<input type="Submit">
+<input type="Submit" value="Next">
 </form>
 EOT;
     echo $output;
-    echo '<p><a href="?action=smarty">Install Smarty</a></p>';
 }
 
 function smarty()
@@ -55,7 +54,7 @@ function smarty()
     $apacheUser = HttpHelper::getRequest('apacheUser', 'post');
 
     echo '<h1>Install Smarty</h1>';
-    $smartyTemplate = SERVER_HTML_BASE_PATH . SERVER_SMARTY_WORKING_PATH;
+    $smartyTemplate = SERVER_SMARTY_WORKING_PATH;
     $output = <<< EOT
 SSH to the server and run this command:<br />
 
@@ -74,35 +73,18 @@ rm -rf smarty<br />
 <p>========== Setup Template ==========</p>
 sudo mkdir -p ${smartyTemplate}<br />
 cd ${smartyTemplate}<br />
-sudo mkdir templates<br />
 sudo mkdir templates_c<br />
 sudo mkdir cache<br />
 sudo mkdir configs<br />
-sudo chown peter:peter templates<br />
 sudo chown {$apacheUser}:{$apacheUser} templates_c<br />
 sudo chown {$apacheUser}:{$apacheUser} cache<br />
 sudo chmod 775 templates_c<br />
 sudo chmod 775 cache<br />
 
-cd ${smartyTemplate}<br />
-sudo vi .htaccess<br />
-
-Add this lines:<br />
->>>>> frameworkTemplate/.htaccess <<<<<<br />
-Options -Indexes<br />
-RewriteEngine On<br />
-RewriteCond %{REQUEST_FILENAME} -f<br />
-RewriteRule !\.(js|gif|jpg|png|css)$ - [F]<br />
->>>>> frameworkTemplate/.htaccess <<<<<<br />
-
-- Download ZIP mvcTemplate from <a href="https://github.com/bonepeter/mvcTemplate" target="_blank">github.com</a><br />
-- Unzip and copy to ${smartyTemplate}/templates/<br />
-
 <p>========== Reference ==========</p>
 - <a href="http://www.smarty.net/download" target="_blank">Download Smarty</a><br />
 - <a href="http://www.smarty.net/quick_install" target="_blank">Quick Install Reference</a><br />
-- Install the template files in /var/www/html/frameworkTemplate/smarty<br />
-==========<br />
+<p>==========</p>
 EOT;
     echo $output;
     echo '<p><a href="?action=deploy">Next - Deployment Setup</a></p>';
@@ -209,8 +191,9 @@ EOT;
 
         echo 'SSH to the server, run mysql command to create the database:<br />';
         echo <<< EOT
-==========<br />
+<p>==========</p>
 $createDatabaseCmd<br />
+<p>==========</p>
 $createDeployUserCmd<br />
 $createDeployAccessCmd<br />
 $createWebUserCmd<br />
@@ -218,7 +201,7 @@ $createWebUserAccessCmd<br />
 Or<br />
 $createOptionalWebUserCmd<br />
 $createOptionalWebUserAccessCmd<br />
-==========<br />
+<p>==========</p>
 EOT;
 
         printBackLinks();
