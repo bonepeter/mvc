@@ -10,7 +10,9 @@ abstract class DbTable {
     protected $data = array();
     protected $tableName = '';
     protected $idColName = '';
-    protected $colsName = array();
+    protected $cols = array();
+    protected $crudReadable = false;
+    protected $crudWritable = false;
 
     public function __construct(Db $db) {
         $this->db = $db;
@@ -21,12 +23,23 @@ abstract class DbTable {
         return $this->tableName;
     }
 
-    public function getColsName() {
-        return $this->colsName;
-    }
-
     public function getIdColName() {
         return $this->idColName;
+    }
+
+    public function getCols()
+    {
+        return $this->cols;
+    }
+
+    public function isCrudReadable()
+    {
+        return $this->crudReadable;
+    }
+
+    public function isCrudWritable()
+    {
+        return $this->crudWritable;
     }
 
     public function getDataArray() {

@@ -11,8 +11,15 @@ class UserDb extends DbTable
 		parent::__construct($db);
 		$this->tableName = 'User';
 		$this->idColName = 'User_Id';
-		$this->colsName = array('User_Id', 'User_Username', 'User_Password',
-            'User_DisplayName', 'User_Level');
+        $this->cols = array(
+            array('name' => 'User_Id'),
+            array('name' => 'User_Username'),
+            array('name' => 'User_Password'),
+            array('name' => 'User_DisplayName'),
+            array('name' => 'User_Level'),
+        );
+        $this->crudReadable = true;
+        $this->crudWritable = true;
 	}
 
 	public function getUserByUsername($username) {
