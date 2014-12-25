@@ -55,7 +55,7 @@ function smarty()
     $apacheUser = HttpHelper::getRequest('apacheUser', 'post');
 
     echo '<h1>Install Smarty</h1>';
-    $smartyTemplate = SMARTY_TEMPLATE_PATH;
+    $smartyTemplate = SERVER_HTML_BASE_PATH . SERVER_SMARTY_WORKING_PATH;
     $output = <<< EOT
 SSH to the server and run this command:<br />
 
@@ -113,7 +113,7 @@ EOT;
 function deploy()
 {
     echo '<h1>Deployment Setup</h1>';
-    $htmlDir = HTML_DIR;
+    $htmlDir = SERVER_HTML_BASE_PATH;
     $projName = PROJECT_NAME;
     $output = <<< EOT
 SSH to the server and run this command:<br />

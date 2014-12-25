@@ -6,7 +6,7 @@ use Smarty;
 
 require_once __DIR__ . '/../../config/config.php';
 
-require_once SMARTY_LIB_PATH;
+require_once SERVER_SMARTY_LIB_PATH;
 
 class SmartyTemplate
 {
@@ -15,14 +15,14 @@ class SmartyTemplate
 
     public function __construct()
     {
-        $baseDir = SMARTY_TEMPLATE_PATH;
-        $this->templateBaseDir = $baseDir . 'templates/';
+        $workingDir = SERVER_HTML_BASE_PATH . SERVER_SMARTY_WORKING_PATH;
+        $this->templateBaseDir = SERVER_HTML_BASE_PATH . SERVER_SMARTY_TEMPLATES_PATH;
         $this->template = new Smarty();
         $this->template->setTemplateDir($this->templateBaseDir);
-        $this->template->setCompileDir($baseDir . 'templates_c');
-        $this->template->setCacheDir($baseDir . 'cache');
-        $this->template->setConfigDir($baseDir . 'configs');
-        $this->addData('baseDir', SMARTY_WEB_PATH . 'templates/');
+        $this->template->setCompileDir($workingDir . 'templates_c');
+        $this->template->setCacheDir($workingDir . 'cache');
+        $this->template->setConfigDir($workingDir . 'configs');
+        $this->addData('baseDir', URL_SMARTY_TEMPLATES_PATH);
     }
 
     public function addData($name, $data) {

@@ -1,0 +1,13 @@
+body {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 0.8em;
+	background-color: #b0c4de;
+}
+
+td.right {
+    text-align: right;
+}
+
+td.center {
+    text-align: center;
+}
