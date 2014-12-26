@@ -1,13 +1,12 @@
 wip: CRUD a db table
 - search with like
 
-pdo way of running query
-
 create a test directory, move fitnesse and unitTest to it
 
 ---------- DONE ----------
 
 20141226:
+Done. Db->runQuery, runSelectQuery: Added $data for prepare statement
 Done. CRUD: Can input searching criteria
 Done. CRUD: Search result paging
 Done. Fixed Login template bug

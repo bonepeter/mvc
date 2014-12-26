@@ -174,15 +174,15 @@ class Db {
         }
     }
 
-    public function runQuery($sql) {
+    public function runQuery($sql, $data = array()) {
         //var_dump($sql);
         $stmt = $this->dbh->prepare($sql);
-        return $stmt->execute();
+        return $stmt->execute($data);
     }
 
-    public function runSelectQuery($sql) {
+    public function runSelectQuery($sql, $data = array()) {
         $stmt = $this->dbh->prepare($sql);
-        $isSqlRunOk = $stmt->execute();
+        $isSqlRunOk = $stmt->execute($data);
         if ($isSqlRunOk) {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
