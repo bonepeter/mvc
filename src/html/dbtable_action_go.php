@@ -14,14 +14,16 @@ $action = HttpHelper::getRequest('action', 'post');
 
 try {
     $controller = new DbCrudController($table);
-    if ($action == 'add') {
-        $controller->add();
-    }
-    if ($action == 'edit') {
-        $controller->edit();
-    }
-    if ($action == 'delete') {
-        $controller->delete();
+    switch ($action)
+    {
+        case 'search':
+            $controller->display(); break;
+        case 'add':
+            $controller->add(); break;
+        case 'edit':
+            $controller->edit(); break;
+        case 'delete':
+            $controller->delete(); break;
     }
 } catch (\Exception $e) {
     echo $e->getMessage();

@@ -40,9 +40,11 @@ class DbCrudController
     }
 
 
-    public function display($id, $pageNo = 1)
+    public function display($id = '', $pageNo = 1)
     {
-        $where = array();
+        $where = $this->httpParameterToArray();
+        $whereStr = $this->searchArrayToString($where);
+
         $rowEachPage = 20;
         if (empty($pageNo))
         {
@@ -64,11 +66,42 @@ class DbCrudController
 
         $data = array('tableName' => $this->tableName,
             'cols' => $this->table->getCols(), 'rows' => $rows,
-            'pageTotal' => $this->table->getRowCount() / $rowEachPage,
+            'searchStr' => $whereStr,
+            'pageTotal' => $this->table->getRowCount($where) / $rowEachPage,
             'edit' => $editUser);
 
         $view = new SmartyTemplateView();
         echo $view->renderWithData($data, 'dbtable');
+    }
+
+
+    private function httpParameterToArray()
+    {
+        $where = array();
+        foreach ($this->table->getCols() as $col)
+        {
+            $parameterValue = HttpHelper::getRequest($col['name'], 'get');
+            if ($parameterValue != '')
+            {
+                $where[ $col['name'] ] = $parameterValue;
+            }
+            $parameterValue = HttpHelper::getRequest($col['name'], 'post');
+            if ($parameterValue != '')
+            {
+                $where[ $col['name'] ] = $parameterValue;
+            }
+        }
+        return $where;
+    }
+
+
+    private function searchArrayToString($whereArr)
+    {
+        $whereStr = '';
+        foreach ($whereArr as $name => $value) {
+            $whereStr .= sprintf('&%s=%s', $name, $value);
+        }
+        return $whereStr;
     }
 
 

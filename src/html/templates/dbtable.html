@@ -2,14 +2,6 @@
     $(function () {
         $("#tabs").tabs();
 
-        $('html, body').animate({
-            scrollTop: 0
-        }, 'fast');
-
-        $( "#home" ).click(function () {
-            window.location = "index.php";
-        });
-
         $( "#deleteForm" ).submit(function( event ) {
             var result = confirm("Are you sure to delete the record?");
             if (! result)
@@ -22,14 +14,27 @@
 
 <div id="tabs">
     <ul>
-        <li id="home"><a href="#tabs-home">Home</a></li>
-        <li><a href="#tabs-result">Search Result</a></li>
+        <li><a href="#tabs-search">Search</a></li>
+        <li><a href="#tabs-result">Result</a></li>
         <li><a href="#tabs-edit">Edit</a></li>
         <li><a href="#tabs-add">Add</a></li>
+        <li><a href="#tabs-more">More</a></li>
     </ul>
 
-    <div id="tabs-home">
+    <div id="tabs-search">
         <h2>Search</h2>
+
+        <form action="dbtable_action_go.php#tabs-result" method="post">
+            <input type="hidden" name="table" value="{$data.tableName}" />
+            <input type="hidden" name="action" value="search" />
+            {foreach from=$data.cols item=row}
+            <p>
+                <label for="add_{$row.name}">{$row.name}:</label>
+                <input id="add_{$row.name}" name="{$row.name}" type="text" value="" />
+            </p>
+            {/foreach}
+            <input type="submit" value="Search">
+        </form>
     </div>
 
     <div id="tabs-result">
@@ -45,7 +50,7 @@
             <tr>
                 {foreach from=$row item=item name=rowLoop}
                 {if $smarty.foreach.rowLoop.first}
-                    <td><a href="?table={$data.tableName}&id={$item}#tabs-edit">{$item}</a></td>
+                    <td><a href="dbtable.php?table={$data.tableName}&id={$item}#tabs-edit">{$item}</a></td>
                 {else}
                     <td>{$item}</td>
                 {/if}
@@ -56,7 +61,7 @@
         <p>
             Page
             {for $page=1 to $data.pageTotal}
-                | <a href="?table={$data.tableName}&page={$page}#tabs-result">{$page}</a>
+                | <a href="dbtable.php?table={$data.tableName}&page={$page}{$data.searchStr}#tabs-result">{$page}</a>
             {/for}
         </p>
         <p><i>Last Update: {$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}</i></p>
@@ -105,5 +110,10 @@
             {/foreach}
             <input type="submit" value="Add">
         </form>
+    </div>
+
+    <div id="tabs-more">
+        <h2>More</h2>
+        <a href="index.php">Home</a>
     </div>
 </div>
