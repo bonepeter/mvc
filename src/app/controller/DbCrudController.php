@@ -40,7 +40,7 @@ class DbCrudController
     }
 
 
-    public function display($id = '', $pageNo = 1)
+    public function display($id = '', $pageNo = 1, $sortBy = '')
     {
         $where = $this->httpParameterToArray();
         $whereStr = $this->searchArrayToString($where);
@@ -50,7 +50,7 @@ class DbCrudController
         {
             $pageNo = 1;
         }
-        $rows = $this->table->getData($where, '', $rowEachPage, $pageNo);
+        $rows = $this->table->getData($where, $sortBy, $rowEachPage, $pageNo);
 
         if (empty($id))
         {
@@ -68,6 +68,7 @@ class DbCrudController
             'cols' => $this->table->getCols(), 'rows' => $rows,
             'searchStr' => $whereStr,
             'pageTotal' => $this->table->getRowCount($where) / $rowEachPage,
+            'sort' => $sortBy,
             'edit' => $editUser);
 
         $view = new SmartyTemplateView();

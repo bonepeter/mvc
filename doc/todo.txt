@@ -1,11 +1,13 @@
 wip: CRUD a db table
-- search with like
+- search with like (text)
+- search by date picker (date)
 
 create a test directory, move fitnesse and unitTest to it
 
 ---------- DONE ----------
 
 20141226:
+Done. CRUD: Add sorting
 Done. Db->runQuery, runSelectQuery: Added $data for prepare statement
 Done. CRUD: Can input searching criteria
 Done. CRUD: Search result paging

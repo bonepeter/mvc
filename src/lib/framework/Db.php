@@ -59,6 +59,7 @@ class Db {
             $whereStr = substr($whereStr, 0, -5);
         }
 
+        // todo: need to check for sql injection
         $orderbyStr = '';
         if ($orderby != '') {
             $orderbyStr = ' ORDER BY ' . $orderby;

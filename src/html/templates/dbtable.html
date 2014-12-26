@@ -43,7 +43,7 @@
         <table border="1">
             <tr>
                 {foreach from=$data.cols item=row}
-                    <th>{$row.name}</th>
+                    <th><a href="dbtable.php?table={$data.tableName}&sort={$row.name}{$data.searchStr}#tabs-result">{$row.name}</a></th>
                 {/foreach}
             </tr>
             {foreach from=$data.rows item=row}
@@ -61,7 +61,7 @@
         <p>
             Page
             {for $page=1 to $data.pageTotal}
-                | <a href="dbtable.php?table={$data.tableName}&page={$page}{$data.searchStr}#tabs-result">{$page}</a>
+                | <a href="dbtable.php?table={$data.tableName}&page={$page}&sort={$data.sort}{$data.searchStr}#tabs-result">{$page}</a>
             {/for}
         </p>
         <p><i>Last Update: {$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}</i></p>
