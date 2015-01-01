@@ -1,12 +1,10 @@
-
 CRUD a db table
 - search with like (text)
 - search by date picker (date)
 
-create a test directory, move fitnesse and unitTest to it
-
 ---------- DONE ----------
 20150101:
+Done. Start using fitnesse
 Done. deploy.sh: can manage deploy db to server different from web server
 
 20141226:

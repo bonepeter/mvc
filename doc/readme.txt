@@ -55,3 +55,5 @@ java -jar fitnesse-standalone.jar -p 8086 &
 |-4      |-3              |
 |2       |4               |
 >>>>> Test <<<<<
+
+-> Browser: http://ip:8086/FrontPage.TestController

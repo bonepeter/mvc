@@ -9,10 +9,12 @@ class Auth {
 
 	private $user;
 
-	public function __construct() {
-        $db = Helper::createDb(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        $user = new UserDb($db);
-		$this->user = $user;
+	public function __construct($defaultDb = null) {
+        if (is_null($defaultDb))
+        {
+            $defaultDb = Helper::createDb(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        }
+        $this->user = new UserDb($defaultDb);
 	}
 
 	public function isAuthenticate($username, $password) {
