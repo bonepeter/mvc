@@ -40,9 +40,11 @@ function showRequirement()
 {
     echo '<p>Requirement: Apache, php 5, Smarty</p>';
     echo '- Setup file src/config/config.php<br />';
+    $smartyTemplate = SERVER_SMARTY_WORKING_PATH;
     $output = <<< EOT
 <form action="?action=smarty" method="post">
 <p>Apache run user: <input type="text" name="apacheUser" value="www-data"></p>
+<p>Smarty Working Path: <input type="text" name="smartyWorkingPath" value="${smartyTemplate}" size="80"></p>
 <input type="Submit" value="Next">
 </form>
 EOT;
@@ -52,9 +54,10 @@ EOT;
 function smarty()
 {
     $apacheUser = HttpHelper::getRequest('apacheUser', 'post');
+    $smartyTemplate = HttpHelper::getRequest('smartyWorkingPath', 'post');
 
     echo '<h1>Install Smarty</h1>';
-    $smartyTemplate = SERVER_SMARTY_WORKING_PATH;
+
     $output = <<< EOT
 SSH to the server and run this command:<br />
 
