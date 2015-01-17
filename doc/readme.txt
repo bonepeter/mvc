@@ -46,14 +46,19 @@ java -jar fitnesse-standalone.jar -p 8086 &
 
 >>>>> Test <<<<<
 !define TEST_RUNNER (/var/fitnesse/phpslim.phar)
-!define COMMAND_PATTERN (php %m /var/www/html/framework/fitnesse)
+!define COMMAND_PATTERN (php %m /Applications/mampstack-5.4.34-0/apache2/htdocs/mvc/fitnesse)
 !define TEST_SYSTEM {slim}
 
-!|my fixture              |
-|my value|value successor?|
-|5       |6               |
-|-4      |-3              |
-|2       |4               |
+!|Login                    |
+|username|password |result?|
+|peter   |peter    |true   |
+|peter   |wrongpass|false  |
+|peter   |         |false  |
+|john    |peter    |false  |
+|        |         |false  |
+|        |peter    |false  |
+|        |PETER    |false  |
+|PETER   |peter    |true   |
 >>>>> Test <<<<<
 
 -> Browser: http://ip:8086/FrontPage.TestController

@@ -22,14 +22,14 @@ class Login
         $this->pass = $pass;
     }
 
-    public function valueSuccess()
+    public function result()
     {
         $db = Helper::createDb(TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASSWORD, TEST_DB_NAME);
         $auth = new Auth($db);
         $result = $auth->isAuthenticate($this->user, $this->pass);
         if ($result)
         {
-            return ($result['User_Username'] == $this->user) ? true : false;
+            return (strtolower($result['User_Username']) == strtolower($this->user)) ? true : false;
         }
         else
         {
