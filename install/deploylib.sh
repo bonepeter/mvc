@@ -61,6 +61,12 @@ rm -rf ${gitDir}/
 echo "Get respository..."
 git clone ${gitRespository} ${gitDir}/
 
+if [ ! -d ${gitDir}/src ]
+then
+    echo "Error: Cannot get git respository"
+    exit;
+fi
+
 echo "Zip the upload code..."
 cd ${gitDir}/src
 tar -cf ../deploy.tar .
@@ -105,5 +111,5 @@ echo "Deployment Done"
 echo
 echo "How to rollback"
 echo "- Login to the server"
-echo "> mysql -u $dbUser -p $dbDatabase < ${releaseDir}rollback$releaseNo.sql"
-echo "> ln -sfn $releaseDir<last release no> $htmlLink"
+echo "> mysql -u ${dbUser} -p ${dbDatabase} < ${releaseDir}rollback${releaseNo}.sql"
+echo "> ln -sfn ${releaseDir}<last release no> ${htmlLink}"
