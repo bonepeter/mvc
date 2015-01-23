@@ -90,14 +90,14 @@ ${webServerSshCmd} "cd $releaseDir; cp deploy/conf/config/config.php $releaseNo/
 echo "Upload Database Patch..."
 if [ -f "git/db/patch$releaseNo.sql" ]
 then
-
-	${dbServerScpCmd} git/db/*${releaseNo}.sql ${webServerSsh}:${releaseDir}deploy
-	echo "Run Database Patch..."
-	${dbServerSshCmd} "cd ${releaseDir}deploy; mysql -u $dbUser -p$dbPass $dbDatabase < patch$releaseNo.sql; rm patch$releaseNo.sql"
-	echo "Delete Database Patch..."
+   dbTempPatchDir="/tmp/"
+  ${dbServerScpCmd} git/db/*${releaseNo}.sql ${dbServerSsh}:${dbTempPatchDir}
+  echo "Run Database Patch..."
+  ${dbServerSshCmd} "cd ${dbTempPatchDir}; mysql -u ${dbUser} -p${dbPass} ${dbDatabase} < patch${releaseNo}.sql; rm patch${releaseNo}.sql"
+  echo "Delete Database Patch..."
 
 else
-	echo "No Database Path for this Release"
+  echo "No Database Path for this Release"
 fi
 
 echo "Change symbolic link to new Release..."
