@@ -67,7 +67,7 @@ class DbCrudController
         $data = array('tableName' => $this->tableName,
             'cols' => $this->table->getCols(), 'rows' => $rows,
             'searchStr' => $whereStr,
-            'pageTotal' => $this->table->getRowCount($where) / $rowEachPage,
+            'pageTotal' => ceil($this->table->getRowCount($where) / $rowEachPage),
             'sort' => $sortBy,
             'edit' => $editUser);
 
