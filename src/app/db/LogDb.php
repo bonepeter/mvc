@@ -9,7 +9,7 @@ class LogDb extends DbTable
     public function __construct(Db $db)
     {
         parent::__construct($db);
-        $this->tableName = 'Log';
+        $this->tableName = 'log';
         $this->idColName = 'Log_Id';
         $this->cols = array(
             array('name' => 'Log_Id'),

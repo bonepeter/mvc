@@ -9,7 +9,7 @@ class UserDb extends DbTable
 	public function __construct(Db $db)
     {
 		parent::__construct($db);
-		$this->tableName = 'User';
+		$this->tableName = 'user';
 		$this->idColName = 'User_Id';
         $this->cols = array(
             array('name' => 'User_Id'),
