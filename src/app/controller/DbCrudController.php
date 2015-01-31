@@ -4,6 +4,7 @@ namespace app\controller;
 
 use app\db\LogDb;
 use app\db\UserDb;
+use app\domain\Paging;
 use lib\framework\Helper;
 use app\view\SmartyTemplateView;
 use lib\helper\HttpHelper;
@@ -45,11 +46,14 @@ class DbCrudController
         $where = $this->httpParameterToArray();
         $whereStr = $this->searchArrayToString($where);
 
-        $rowEachPage = 20;
-        if (empty($pageNo))
-        {
-            $pageNo = 1;
-        }
+        $rowEachPage = 10;
+
+        $totalRowCount = $this->table->getRowCount();
+        $paging = new Paging($totalRowCount);
+        $paging->setTotalDisplayPage(10);
+        $paging->setRowEachPage($rowEachPage);
+        $pagingInfo = $paging->getPagingData($pageNo);
+
         $rows = $this->table->getData($where, $sortBy, $rowEachPage, $pageNo);
 
         if (empty($id))
@@ -67,14 +71,16 @@ class DbCrudController
         $data = array('tableName' => $this->tableName,
             'cols' => $this->table->getCols(), 'rows' => $rows,
             'searchStr' => $whereStr,
-            'pageTotal' => ceil($this->table->getRowCount($where) / $rowEachPage),
+            'pagingFirst' => $pagingInfo['firstPage'],
+            'pagingLast' => $pagingInfo['lastPage'],
+            'pagingStart' => $pagingInfo['startPage'],
+            'pagingEnd' => $pagingInfo['endPage'],
             'sort' => $sortBy,
             'edit' => $editUser);
 
         $view = new SmartyTemplateView();
         echo $view->renderWithData($data, 'dbtable');
     }
-
 
     private function httpParameterToArray()
     {

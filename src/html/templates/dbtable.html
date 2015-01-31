@@ -59,12 +59,12 @@
             {/foreach}
         </table>
         <p>
-            Page
-            <a href="dbtable.php?table={$data.tableName}&page=1&sort={$data.sort}{$data.searchStr}#tabs-result">First</a>
-            {for $page=1 to $data.pageTotal}
+            Page:
+            <a href="dbtable.php?table={$data.tableName}&page={$data.pagingFirst}&sort={$data.sort}{$data.searchStr}#tabs-result">First</a>
+            {for $page=$data.pagingStart to $data.pagingEnd}
                 | <a href="dbtable.php?table={$data.tableName}&page={$page}&sort={$data.sort}{$data.searchStr}#tabs-result">{$page}</a>
             {/for}
-            | <a href="dbtable.php?table={$data.tableName}&page={$data.pageTotal}&sort={$data.sort}{$data.searchStr}#tabs-result">Last</a>
+            | <a href="dbtable.php?table={$data.tableName}&page={$data.pagingLast}&sort={$data.sort}{$data.searchStr}#tabs-result">Last</a>
         </p>
         <p><i>Last Update: {$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}</i></p>
     </div>
