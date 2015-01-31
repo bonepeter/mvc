@@ -2,14 +2,13 @@
 
 namespace html;
 
-use app\controller\DbCrudController;
+use app\controller\/* CapitalName */Controller;
 use lib\helper\HttpHelper;
 
 require_once __DIR__ . '/../lib/framework/main.php';
 
 require_once 'isLogin.inc.php';
 
-$table = HttpHelper::getRequest('table', 'get');
 $id = HttpHelper::getRequest('id', 'get');
 $pageNo = HttpHelper::getRequest('page', 'get');
 $sortBy = HttpHelper::getRequest('sort', 'get');
@@ -20,7 +19,7 @@ if (is_null($pageNo))
 }
 
 try {
-    $controller = new DbCrudController($table);
+    $controller = new /* CapitalName */Controller();
     $controller->display($id, $pageNo, $sortBy);
 } catch (\Exception $e) {
     echo $e->getMessage();

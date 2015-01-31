@@ -11,10 +11,10 @@ use lib\helper\HttpHelper;
 
 class DbCrudController
 {
-    private $db = null;
-    private $table = null;
-    private $tableName = '';
-
+    protected $db = null;
+    protected $table = null;
+    protected $tableName = '';
+    protected $displayTemplate = 'dbtable';
 
     function __construct($table)
     {
@@ -79,7 +79,7 @@ class DbCrudController
             'edit' => $editUser);
 
         $view = new SmartyTemplateView();
-        echo $view->renderWithData($data, 'dbtable');
+        echo $view->renderWithData($data, $this->displayTemplate);
     }
 
     private function httpParameterToArray()
@@ -134,7 +134,7 @@ class DbCrudController
         $this->log($this->tableName, $logMsg);
 
         echo '<p>Record Added</p>';
-        echo sprintf('<p><a href="dbtable.php?table=%s">Back</a></p>', $this->tableName);
+        echo sprintf('<p><a href="%s.php?table=%s">Back</a></p>', $this->displayTemplate, $this->tableName);
     }
 
 
@@ -156,7 +156,7 @@ class DbCrudController
         $this->log($this->tableName, $logMsg);
 
         echo '<p>Record Modified</p>';
-        echo sprintf('<p><a href="dbtable.php?table=%s">Back</a></p>', $this->tableName);
+        echo sprintf('<p><a href="%s.php?table=%s">Back</a></p>', $this->displayTemplate, $this->tableName);
     }
 
 
@@ -166,13 +166,7 @@ class DbCrudController
         {
             throw new \Exception('Table not writable.');
         }
-//        $data = array();
-//        $logMsg = 'Edit: ';
-//        foreach ($this->table->getCols() as $col)
-//        {
-//            $data[ $col['name'] ] = HttpHelper::getRequest($col['name'], 'post');
-//            $logMsg .= $col['name'] . ': ' . $data[ $col['name'] ] . ', ';
-//        }
+
         $id = HttpHelper::getRequest($this->table->getIdColName(), 'post');
         if (empty($id))
         {
@@ -184,7 +178,7 @@ class DbCrudController
         $this->log($this->tableName, $logMsg);
 
         echo '<p>Record Deleted</p>';
-        echo sprintf('<p><a href="dbtable.php?table=%s">Back</a></p>', $this->tableName);
+        echo sprintf('<p><a href="%s.php?table=%s">Back</a></p>', $this->displayTemplate, $this->tableName);
     }
 
 

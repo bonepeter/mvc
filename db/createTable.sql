@@ -37,3 +37,15 @@ CREATE TABLE user (
 
 INSERT INTO user SET User_Username = 'peter', User_Password = SHA('peter'), User_DisplayName = 'Ken', User_Level = 2;
 INSERT INTO user SET User_Username = 'admin', User_Password = SHA('admin'), User_DisplayName = 'Admin', User_Level = 1;
+
+
+-- Log2 --
+
+DROP TABLE IF EXISTS log2;
+
+CREATE TABLE log2 (
+  Log2_Id INT unsigned NOT NULL auto_increment, PRIMARY KEY (Log2_Id),
+  Log2_Type CHAR(10) NOT NULL default '',
+  Log2_Message TEXT NOT NULL default '',
+  Log2_CreateDate timestamp DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB COLLATE utf8mb4_unicode_ci;
