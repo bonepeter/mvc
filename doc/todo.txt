@@ -3,6 +3,10 @@ CRUD a db table
 - search by date picker (date)
 
 ---------- DONE ----------
+20150207:
+Done. Revamp Db.php select function to handle all where clause operation
+Done. bug: Search Id=1, paging show all
+
 20150101:
 Done. Start using fitnesse
 Done. deploy.sh: can manage deploy db to server different from web server

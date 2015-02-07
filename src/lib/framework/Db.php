@@ -9,74 +9,69 @@ class Db {
 
     private $dbh = null;
 
-    /**
-     * @param $dbh PDO object. Can be obtained by createSqliteMemoryPdo or createMysqlPdo
-     */
-    function __construct($dbh) {
+    function __construct(PDO $dbh) {
         $this->dbh = $dbh;
     }
 
-//    public static function createSqliteMemoryPdo() {
-//        $pdo = new PDO('sqlite::memory:');
-//        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//        return $pdo;
-//    }
-//
-//    public static function createMysqlPdo($host, $user, $pass, $dbName) {
-//        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8', $host, $dbName);
-//        $pdo = new PDO($dsn, $user, $pass);
-//        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//        return $pdo;
-//    }
-
-    public function dbh() {
-        return $this->dbh;
+    public function select($select = '*', $tableName = '', $whereCols = array(), $orderby = '', $limit = 0, $offset = 0) {
+        if ($tableName === '')
+        {
+            $prepareSql = sprintf("SELECT %s", $select);
+        }
+        else
+        {
+            $whereStr = $this->getSelectWhereString($whereCols);
+            $orderbyStr = $this->getSelectOrderByString($orderby);
+            $limitStr = $this->getSelectLimitString($limit, $offset);
+            $prepareSql = sprintf("SELECT %s FROM %s %s %s %s;", $select, $tableName, $whereStr, $orderbyStr, $limitStr);
+        }
+        $stmt = $this->dbh->prepare($prepareSql);
+        $this->bindValueByWhereCols($whereCols, $stmt);
+        return $this->executeSql($stmt);
     }
 
-    /**
-     * Get rows from a database table
-     * TODO check SQL injection
-     *
-     * @param string $tableName Table name
-     * @param string $select Select column name
-     * @param array $where Where statement of the sql (without WHERE)
-     * 	developer needs to escape the input string
-     * @param string $orderby Order By statement of the sql (without ORDER BY)
-     * 	developer needs to escape the input string
-     * @param string $limit Limit statement of the sql (without LIMIT)
-     * 	developer needs to escape the input string
-     * @return array Result of the select statement
-     */
-    public function select($tableName, $select = '*', $where = array(), $orderby = '', $limit = '') {
-        $whereStr = 'WHERE ';
+    private function getSelectWhereString($whereCols)
+    {
+        $whereStr = '';
 
-        foreach ($where as $key => $value) {
-            $whereStr .= sprintf("%s=:%s AND ", $key, $key);
-        }
-        if ($whereStr == 'WHERE ') {
-            $whereStr = '';
-        } else {
-            $whereStr = substr($whereStr, 0, -5);
+        /* @var DbWhereCol[] $whereCols */
+        foreach ($whereCols as $whereCol) {
+            $whereStr .= $whereCol->getSqlString() . ' AND ';
         }
 
-        // todo: need to check for sql injection
-        $orderbyStr = '';
-        if ($orderby != '') {
-            $orderbyStr = ' ORDER BY ' . $orderby;
-        }
+        return ($whereStr === '') ? '' : 'WHERE ' . substr($whereStr, 0, -5);
+    }
 
+    private function getSelectOrderByString($orderBy)
+    {
+        return ($orderBy == '') ? '' : ' ORDER BY ' . $orderBy;
+    }
+
+    private function getSelectLimitString($limit, $offset)
+    {
         $limitStr = '';
-        if ($limit != '') {
-            $limitStr = ' LIMIT ' . $limit;
+        if (is_numeric($limit) && is_numeric($offset)) {
+            if ($limit != 0) {
+                $limitStr = ' LIMIT ' . $limit;
+                if ($offset != 0) {
+                    $limitStr .= ' OFFSET ' . $offset;
+                }
+            }
         }
+        return $limitStr;
+    }
 
-        $prepareSql = sprintf("SELECT %s FROM %s %s %s %s;", $select, $tableName, $whereStr, $orderbyStr, $limitStr);
-        $stmt = $this->dbh->prepare($prepareSql);
-        $isSqlRunOk = $stmt->execute($where);
-        if ($isSqlRunOk) {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    private function bindValueByWhereCols($whereCols, $stmt)
+    {
+        /* @var DbWhereCol[] $whereCols */
+        foreach ($whereCols as $whereCol) {
+            $whereCol->bind($stmt);
         }
-        return false;
+    }
+
+    private function executeSql(\PDOStatement $stmt)
+    {
+        return $stmt->execute() ? $stmt->fetchAll(PDO::FETCH_ASSOC) : false;
     }
 
     /**
@@ -176,7 +171,6 @@ class Db {
     }
 
     public function runQuery($sql, $data = array()) {
-        //var_dump($sql);
         $stmt = $this->dbh->prepare($sql);
         return $stmt->execute($data);
     }
@@ -190,4 +184,37 @@ class Db {
         return false;
     }
 
+}
+
+class DbWhereCol
+{
+    private $name;
+    private $value;
+    private $op;
+    private $type;
+
+    function __construct($name, $value, $op = '=', $type = DbWhereColType::String)
+    {
+        $this->name = $name;
+        $this->value = $value;
+        $this->op = $op;
+        $this->type = $type;
+    }
+
+    public function getSqlString()
+    {
+        return sprintf('%s %s :%s', $this->name, $this->op, $this->name);
+    }
+
+    public function bind(\PDOStatement $stmt)
+    {
+        $stmt->bindValue(':' . $this->name, $this->value, $this->type);
+    }
+}
+
+abstract class DbWhereColType
+{
+    const String = PDO::PARAM_STR;
+    const Integer = PDO::PARAM_INT;
+    const Boolean = PDO::PARAM_BOOL;
 }

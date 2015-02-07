@@ -3,6 +3,7 @@
 namespace app\db;
 
 use lib\framework\Db;
+use lib\framework\DbWhereCol;
 
 abstract class DbTable {
 
@@ -42,25 +43,13 @@ abstract class DbTable {
         return $this->crudWritable;
     }
 
-//    public function getDataArray() {
-//        return $this->data;
-//    }
-
-//    protected function getDataItem($name) {
-//        if (isset($this->data[$name])) {
-//            return $this->data[$name];
-//        } else {
-//            return '';
-//        }
-//    }
-
     public function getDataById($id) {
-        $result = $this->db->select($this->tableName, '*', array($this->idColName => $id));
+        $result = $this->db->select('*', $this->tableName, array(new DbWhereCol($this->idColName, $id)));
         $this->setDataWithMysqlResult($result);
         return $this->data;
     }
 
-    protected function setDataWithMysqlResult($mysqlResult) {
+    private function setDataWithMysqlResult($mysqlResult) {
         if ($mysqlResult) {
             $this->data = $mysqlResult[0];
         } else {
@@ -68,27 +57,51 @@ abstract class DbTable {
         }
     }
 
-    public function getAll() {
-        return $this->db->select($this->tableName, '*');
-    }
+//    public function getAll() {
+//        return $this->db->select('*', $this->tableName);
+//    }
 
     public function getData($whereArr = array(), $orderbyStr = '', $rowEachPage = 0, $pageNo = 0)
     {
-        if ($rowEachPage == 0)
+        $whereColArr = $this->getWhereColArray($whereArr);
+        if ($whereColArr === false)
         {
-            $limit = '';
+            return false;
         }
-        else
+
+        $limitFirstRow = 0;
+        if ($rowEachPage != 0)
         {
             $limitFirstRow = $rowEachPage * ( $pageNo - 1 );
-            $limit = $limitFirstRow . ',' . $rowEachPage;
         }
-        return $this->db->select($this->tableName, '*', $whereArr, $orderbyStr, $limit);
+
+        return $this->db->select('*', $this->tableName, $whereColArr, $orderbyStr, $rowEachPage, $limitFirstRow);
+    }
+
+    private function getWhereColArray($whereArr)
+    {
+        $whereColArr = array();
+        foreach ($whereArr as $key => $value)
+        {
+            if (! in_array(array('name' => $key), $this->cols))
+            {
+                // TODO: throw exception
+                return false;
+            }
+            $whereColArr = array(new DbWhereCol($key, $value));
+        }
+        return $whereColArr;
     }
 
     public function getRowCount($whereArr = array())
     {
-        $result = $this->db->select($this->tableName, 'count(*) as count', $whereArr);
+        $whereColArr = $this->getWhereColArray($whereArr);
+        if ($whereColArr === false)
+        {
+            return false;
+        }
+
+        $result = $this->db->select('count(*) as count', $this->tableName, $whereColArr);
         if ($result)
         {
             return $result[0]['count'];

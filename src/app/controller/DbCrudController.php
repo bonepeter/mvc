@@ -48,7 +48,7 @@ class DbCrudController
 
         $rowEachPage = 10;
 
-        $totalRowCount = $this->table->getRowCount();
+        $totalRowCount = $this->table->getRowCount($where);
         $paging = new Paging($totalRowCount);
         $paging->setTotalDisplayPage(10);
         $paging->setRowEachPage($rowEachPage);
