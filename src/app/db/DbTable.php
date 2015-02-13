@@ -3,7 +3,8 @@
 namespace app\db;
 
 use lib\framework\Db;
-use lib\framework\DbWhereCol;
+use lib\framework\DbWhereColumns;
+use lib\framework\DbWhereColumnType;
 
 abstract class DbTable {
 
@@ -44,7 +45,9 @@ abstract class DbTable {
     }
 
     public function getDataById($id) {
-        $result = $this->db->select('*', $this->tableName, array(new DbWhereCol($this->idColName, $id)));
+        $whereCols = new DbWhereColumns();
+        $whereCols->addCol($this->idColName, $id);
+        $result = $this->db->select('*', $this->tableName, $whereCols);
         $this->setDataWithMysqlResult($result);
         return $this->data;
     }
@@ -80,7 +83,7 @@ abstract class DbTable {
 
     private function getWhereColArray($whereArr)
     {
-        $whereColArr = array();
+        $whereColArr = new DbWhereColumns();
         foreach ($whereArr as $key => $value)
         {
             if (! in_array(array('name' => $key), $this->cols))
@@ -88,7 +91,8 @@ abstract class DbTable {
                 // TODO: throw exception
                 return false;
             }
-            $whereColArr = array(new DbWhereCol($key, $value));
+            $whereColArr->addCol($key, $value);
+            //$whereColArr = array(new DbWhereCol($key, $value));
         }
         return $whereColArr;
     }

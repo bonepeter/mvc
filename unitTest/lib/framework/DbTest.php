@@ -6,7 +6,8 @@ require_once __DIR__ . '/../../../src/lib/framework/autoLoader.php';
 
 use lib\framework\Db;
 use lib\framework\DbWhereCol;
-use lib\framework\DbWhereColType;
+use lib\framework\DbWhereColumnType;
+use lib\framework\DbWhereColumns;
 
 class DbTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,8 +59,21 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $db = $this->createDb();
 
-        $whereArr = array(new DbWhereCol('id', 2, '>=', DbWhereColType::Integer));
-        $result = $db->select('*', 'table1', $whereArr);
+        $whereCols = new DbWhereColumns();
+        $whereCols->addCol('id', 2, '>=', DbWhereColumnType::Integer);
+        $result = $db->select('*', 'table1', $whereCols);
+
+        $this->assertEquals('t2', $result[0]['title'], 'Wrong title');
+    }
+
+    public function test_Select_WhereSameColumnName()
+    {
+        $db = $this->createDb();
+
+        $whereCols = new DbWhereColumns();
+        $whereCols->addCol('id', 2, '>=', DbWhereColumnType::Integer);
+        $whereCols->addCol('id', 3, '<=', DbWhereColumnType::Integer);
+        $result = $db->select('*', 'table1', $whereCols);
 
         $this->assertEquals('t2', $result[0]['title'], 'Wrong title');
     }
@@ -68,8 +82,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $db = $this->createDb();
 
-        $whereArr = array(new DbWhereCol('title', 't%', 'like', DbWhereColType::String));
-        $result = $db->select('*', 'table1', $whereArr);
+        $whereCols = new DbWhereColumns();
+        $whereCols->addCol('title', 't%', 'like', DbWhereColumnType::String);
+        $result = $db->select('*', 'table1', $whereCols);
 
         $this->assertEquals('t1', $result[0]['title'], 'Wrong title');
         $this->assertEquals('m1', $result[0]['message'], 'Wrong message');
@@ -81,7 +96,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $db = $this->createDb();
 
-        $result = $db->select('*', 'table1', array(), 'id desc');
+        $result = $db->select('*', 'table1', NULL, 'id desc');
 
         $this->assertEquals('t2', $result[0]['title'], 'Wrong title');
         $this->assertEquals('t1', $result[1]['title'], 'Wrong title');
@@ -91,7 +106,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $db = $this->createDb();
 
-        $result = $db->select('*', 'table1', array(), '', 1);
+        $result = $db->select('*', 'table1', NULL, '', 1);
 
         $this->assertEquals(1, count($result), 'Wrong count');
     }
@@ -100,22 +115,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $db = $this->createDb();
 
-        $result = $db->select('*', 'table1', array(), '', 1, 1);
+        $result = $db->select('*', 'table1', NULL, '', 1, 1);
 
         $this->assertEquals('t2', $result[0]['title'], 'Wrong title');
-    }
-
-
-    /*
-     * Test DbWhereCol Class
-     */
-
-    public function test_DbWhereCol_getSqlString()
-    {
-        $col = new DbWhereCol('name1', 'value1', 'op1');
-        $result = $col->getSqlString();
-        $this->assertEquals('name1 op1 :name1', $result, 'wrong getSqlString');
-
     }
 
 }

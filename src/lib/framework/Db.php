@@ -13,33 +13,32 @@ class Db {
         $this->dbh = $dbh;
     }
 
-    public function select($select = '*', $tableName = '', $whereCols = array(), $orderby = '', $limit = 0, $offset = 0) {
+    public function select($select = '*', $tableName = '', DbWhereColumns $whereColumns = NULL, $orderby = '', $limit = 0, $offset = 0) {
         if ($tableName === '')
         {
             $prepareSql = sprintf("SELECT %s", $select);
         }
         else
         {
-            $whereStr = $this->getSelectWhereString($whereCols);
+            if (is_null($whereColumns))
+            {
+                $whereStr = '';
+            }
+            else
+            {
+                $whereStr = $whereColumns->getSqlString();
+            }
             $orderbyStr = $this->getSelectOrderByString($orderby);
             $limitStr = $this->getSelectLimitString($limit, $offset);
             $prepareSql = sprintf("SELECT %s FROM %s %s %s %s;", $select, $tableName, $whereStr, $orderbyStr, $limitStr);
         }
         $stmt = $this->dbh->prepare($prepareSql);
-        $this->bindValueByWhereCols($whereCols, $stmt);
-        return $this->executeSql($stmt);
-    }
+        if (! is_null($whereColumns))
+        {
+            $whereColumns->bindValueToStatement($stmt);
 
-    private function getSelectWhereString($whereCols)
-    {
-        $whereStr = '';
-
-        /* @var DbWhereCol[] $whereCols */
-        foreach ($whereCols as $whereCol) {
-            $whereStr .= $whereCol->getSqlString() . ' AND ';
         }
-
-        return ($whereStr === '') ? '' : 'WHERE ' . substr($whereStr, 0, -5);
+        return $this->executeSql($stmt);
     }
 
     private function getSelectOrderByString($orderBy)
@@ -59,14 +58,6 @@ class Db {
             }
         }
         return $limitStr;
-    }
-
-    private function bindValueByWhereCols($whereCols, $stmt)
-    {
-        /* @var DbWhereCol[] $whereCols */
-        foreach ($whereCols as $whereCol) {
-            $whereCol->bind($stmt);
-        }
     }
 
     private function executeSql(\PDOStatement $stmt)
@@ -184,37 +175,4 @@ class Db {
         return false;
     }
 
-}
-
-class DbWhereCol
-{
-    private $name;
-    private $value;
-    private $op;
-    private $type;
-
-    function __construct($name, $value, $op = '=', $type = DbWhereColType::String)
-    {
-        $this->name = $name;
-        $this->value = $value;
-        $this->op = $op;
-        $this->type = $type;
-    }
-
-    public function getSqlString()
-    {
-        return sprintf('%s %s :%s', $this->name, $this->op, $this->name);
-    }
-
-    public function bind(\PDOStatement $stmt)
-    {
-        $stmt->bindValue(':' . $this->name, $this->value, $this->type);
-    }
-}
-
-abstract class DbWhereColType
-{
-    const String = PDO::PARAM_STR;
-    const Integer = PDO::PARAM_INT;
-    const Boolean = PDO::PARAM_BOOL;
 }

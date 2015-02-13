@@ -3,7 +3,7 @@
 namespace app\db;
 
 use lib\framework\Db;
-use lib\framework\DbWhereCol;
+use lib\framework\DbWhereColumns;
 
 class UserDb extends DbTable
 {
@@ -24,8 +24,9 @@ class UserDb extends DbTable
 	}
 
 	public function getUserByUsername($username) {
-        //return $this->db->select('*', $this->tableName, array('User_Username' => $username));
-        return $this->db->select('*', $this->tableName, array(new DbWhereCol('User_Username', $username)));
+        $whereCols = new DbWhereColumns();
+        $whereCols->addCol('User_Username', $username);
+        return $this->db->select('*', $this->tableName, $whereCols);
 	}
 
 }
