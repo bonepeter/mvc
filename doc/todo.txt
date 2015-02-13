@@ -3,6 +3,9 @@ CRUD a db table
 - search by date picker (date)
 
 ---------- DONE ----------
+20150213:
+Done. bug: Db select same column name
+
 20150207:
 Done. Revamp Db.php select function to handle all where clause operation
 Done. bug: Search Id=1, paging show all
