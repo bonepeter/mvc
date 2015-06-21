@@ -11,7 +11,7 @@ class LogDb extends DbTable
         parent::__construct($db);
         $this->tableName = 'log';
         $this->idColName = 'Log_Id';
-        $this->cols = array(
+        $this->colsName = array(
             array('name' => 'Log_Id'),
             array('name' => 'Log_Type'),
             array('name' => 'Log_Message'),

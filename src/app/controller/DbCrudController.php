@@ -16,6 +16,8 @@ class DbCrudController
     protected $tableName = '';
     protected $displayTemplate = 'dbtable';
 
+    const ROW_PER_PAGE = 10;
+
     function __construct($table)
     {
         $this->db = Helper::createDb(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -48,13 +50,16 @@ class DbCrudController
 
         $rowEachPage = 10;
 
-        $totalRowCount = $this->table->getRowCount($where);
-        $paging = new Paging($totalRowCount);
-        $paging->setTotalDisplayPage(10);
-        $paging->setRowEachPage($rowEachPage);
-        $pagingInfo = $paging->getPagingData($pageNo);
+//        $totalRowCount = $this->table->getRowCount($where);
+//        $paging = new Paging($totalRowCount);
+//        $paging->setTotalDisplayPage(10);
+//        $paging->setRowEachPage($rowEachPage);
+//        $pagingInfo = $paging->getPagingData($pageNo);
 
+        $this->table->setPagingPageNo($pageNo, $rowEachPage);
         $rows = $this->table->getData($where, $sortBy, $rowEachPage, $pageNo);
+
+        $rowCount = $this->table->getDataCount($where);
 
         if (empty($id))
         {
@@ -68,18 +73,43 @@ class DbCrudController
             $editUser = $this->table->getDataById($id);
         }
 
-        $data = array('tableName' => $this->tableName,
-            'cols' => $this->table->getCols(), 'rows' => $rows,
-            'searchStr' => $whereStr,
+//        $data = array('tableName' => $this->tableName,
+//            'cols' => $this->table->getCols(), 'rows' => $rows,
+//            'searchStr' => $whereStr,
+//            'pagingFirst' => $pagingInfo['firstPage'],
+//            'pagingLast' => $pagingInfo['lastPage'],
+//            'pagingStart' => $pagingInfo['startPage'],
+//            'pagingEnd' => $pagingInfo['endPage'],
+//            'sort' => $sortBy,
+//            'edit' => $editUser);
+
+        $data = $this->getRenderData($rowCount, $pageNo, $whereStr, $rows);
+        $view = new SmartyTemplateView();
+
+        $data['tableName'] = $this->tableName;
+        $data['cols'] = $this->table->getCols();
+
+        echo $view->renderWithData($data, $this->displayTemplate);
+    }
+
+    private function getRenderData($resultCount, $pageNo, $searchStr, $result)
+    {
+        $paging = new Paging($resultCount);
+        $paging->setTotalDisplayPage(10);
+        $paging->setRowEachPage(self::ROW_PER_PAGE);
+        $pagingInfo = $paging->getPagingData($pageNo);
+
+        $data = array(
             'pagingFirst' => $pagingInfo['firstPage'],
             'pagingLast' => $pagingInfo['lastPage'],
             'pagingStart' => $pagingInfo['startPage'],
             'pagingEnd' => $pagingInfo['endPage'],
-            'sort' => $sortBy,
-            'edit' => $editUser);
+            'sort' => '',
+            'searchStr' => $searchStr,
+        );
 
-        $view = new SmartyTemplateView();
-        echo $view->renderWithData($data, $this->displayTemplate);
+        $data['rows'] = $result;
+        return $data;
     }
 
     private function httpParameterToArray()

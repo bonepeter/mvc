@@ -17,4 +17,9 @@ class HttpHelper
         }
         return '';
     }
+
+    public static function printlnErrorMessage($msg)
+    {
+        echo sprintf('<p style="color: red; font-weight: bold;">%s</p>', $msg);
+    }
 } 

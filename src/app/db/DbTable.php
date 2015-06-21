@@ -11,27 +11,75 @@ abstract class DbTable {
     protected $db = null;
     protected $data = array();
     protected $tableName = '';
+    protected $prefix = '';
     protected $idColName = '';
-    protected $cols = array();
+    protected $colsName = array();
+
+    protected $pagingRowPerPage = 0;
+    protected $pagingLimitFirstRow = 0;
+
     protected $crudReadable = false;
     protected $crudWritable = false;
+
+    protected $sqlSortBy = '';
 
     public function __construct(Db $db) {
         $this->db = $db;
         $this->data = array();
     }
 
-    public function getTableName() {
-        return $this->tableName;
+    public function resetPaging()
+    {
+        $this->pagingRowPerPage = 0;
+        $this->pagingLimitFirstRow = 0;
     }
 
-    public function getIdColName() {
-        return $this->idColName;
+    public function setPagingRowPerPage($rowPerPage)
+    {
+        $this->pagingRowPerPage = $rowPerPage;
     }
+
+    public function setPagingPageNo($pageNo, $rowPerPage = -1)
+    {
+        if ($rowPerPage != -1)
+        {
+            $this->setPagingRowPerPage($rowPerPage);
+        }
+        $this->pagingLimitFirstRow = 0;
+        if ($this->pagingRowPerPage != 0)
+        {
+            $this->pagingLimitFirstRow = $this->pagingRowPerPage * ( $pageNo - 1 );
+        }
+    }
+
+//    public function setSortString($sortingArray)
+//    {
+//        $sortStr = '';
+//        $separator = '';
+//        foreach ($sortingArray as $sortCol)
+//        {
+//            $desc = '';
+//            if (StringHelper::endsWith($sortCol, '^'))
+//            {
+//                $col = substr($sortCol, 0, -1);
+//                $desc = ' desc';
+//            }
+//            else
+//            {
+//                $col = $sortCol;
+//            }
+//            if (in_array($col, $this->colsName))
+//            {
+//                $sortStr .= $separator . $col . $desc;
+//                $separator = ',';
+//            }
+//        }
+//        $this->sqlSortBy = $sortStr;
+//    }
 
     public function getCols()
     {
-        return $this->cols;
+        return $this->colsName;
     }
 
     public function isCrudReadable()
@@ -44,15 +92,45 @@ abstract class DbTable {
         return $this->crudWritable;
     }
 
+    public function getTableName() {
+        return $this->tableName;
+    }
+
+    public function getIdColName() {
+        return $this->idColName;
+    }
+
+    public function getDataArray() {
+        return $this->data;
+    }
+
+    protected function getDataItem($name) {
+        if (isset($this->data[$name])) {
+            return $this->data[$name];
+        } else {
+            return '';
+        }
+    }
+
+    public function getData($searchCols)
+    {
+        return $this->db->select('*', $this->tableName, $this->getDbWhereCols($searchCols),
+            '', $this->pagingRowPerPage, $this->pagingLimitFirstRow);
+    }
+
+    public function getDataCount($searchCols)
+    {
+        $result = $this->db->select('count(*) as count', $this->tableName, $this->getDbWhereCols($searchCols));
+        return $this->getDbCount($result);
+    }
+
     public function getDataById($id) {
-        $whereCols = new DbWhereColumns();
-        $whereCols->addCol($this->idColName, $id);
-        $result = $this->db->select('*', $this->tableName, $whereCols);
+        $result = $this->db->select($this->tableName, '*', array($this->idColName => $id));
         $this->setDataWithMysqlResult($result);
         return $this->data;
     }
 
-    private function setDataWithMysqlResult($mysqlResult) {
+    protected function setDataWithMysqlResult($mysqlResult) {
         if ($mysqlResult) {
             $this->data = $mysqlResult[0];
         } else {
@@ -60,60 +138,8 @@ abstract class DbTable {
         }
     }
 
-//    public function getAll() {
-//        return $this->db->select('*', $this->tableName);
-//    }
-
-    public function getData($whereArr = array(), $orderbyStr = '', $rowEachPage = 0, $pageNo = 0)
-    {
-        $whereColArr = $this->getWhereColArray($whereArr);
-        if ($whereColArr === false)
-        {
-            return false;
-        }
-
-        $limitFirstRow = 0;
-        if ($rowEachPage != 0)
-        {
-            $limitFirstRow = $rowEachPage * ( $pageNo - 1 );
-        }
-
-        return $this->db->select('*', $this->tableName, $whereColArr, $orderbyStr, $rowEachPage, $limitFirstRow);
-    }
-
-    private function getWhereColArray($whereArr)
-    {
-        $whereColArr = new DbWhereColumns();
-        foreach ($whereArr as $key => $value)
-        {
-            if (! in_array(array('name' => $key), $this->cols))
-            {
-                // TODO: throw exception
-                return false;
-            }
-            $whereColArr->addCol($key, $value);
-            //$whereColArr = array(new DbWhereCol($key, $value));
-        }
-        return $whereColArr;
-    }
-
-    public function getRowCount($whereArr = array())
-    {
-        $whereColArr = $this->getWhereColArray($whereArr);
-        if ($whereColArr === false)
-        {
-            return false;
-        }
-
-        $result = $this->db->select('count(*) as count', $this->tableName, $whereColArr);
-        if ($result)
-        {
-            return $result[0]['count'];
-        }
-        else
-        {
-            return 0;
-        }
+    public function getAll() {
+        return $this->db->select($this->tableName, '*');
     }
 
     public function add($data) {
@@ -126,6 +152,102 @@ abstract class DbTable {
 
     public function deleteById($id) {
         return $this->db->delete($this->tableName, $id, $this->idColName);
+    }
+
+    public function runQuery($sql) {
+        return $this->db->runQuery($sql);
+    }
+
+    public function runSelectQuery($sql) {
+        return $this->db->runSelectQuery($sql);
+    }
+
+    protected function setWhereArray(&$arr, $colName, $value)
+    {
+        if (is_null($value))
+        {
+            return false;
+        }
+        if ($value === '')
+        {
+            return false;
+        }
+        if ($value == 0)
+        {
+            $arr[$colName] = $value;
+        }
+        if (! empty($value))
+        {
+            $arr[$colName] = $value;
+        }
+    }
+
+    protected function setWhereSql(&$sql, $colName, $op, $value)
+    {
+        if (is_null($value))
+        {
+            return false;
+        }
+        if ($value == '')
+        {
+            return false;
+        }
+        if ($value == 0)
+        {
+            $where = $colName . $op . "'" . $value . "'";
+        }
+        if (! empty($value))
+        {
+            $where = $colName . $op . "'" . $value . "'";
+        }
+        if (empty($sql))
+        {
+            $sql = ' WHERE ' . $where;
+        } else {
+            $sql .= ' AND ' . $where;
+        }
+    }
+
+    protected function getDbWhereCols($whereArr)
+    {
+        $whereCols = new DbWhereColumns();
+        foreach ($whereArr as $item) {
+            if (array_key_exists($item['name'], $this->colsName)) {
+                $op = '=';
+                if (is_array($item))
+                {
+                    $value = $item['value'];
+                    if (isset($item['op']))
+                    {
+                        $op = $item['op'];
+                    }
+                    $type = $this->getDbWhereColType($item['name']);
+
+                    $whereCols->addCol($this->prefix . $item['name'], $value, $op, $type);
+                }
+            }
+        }
+        return $whereCols;
+    }
+
+    protected function getDbCount($result)
+    {
+        return $result ? $result[0]['count'] : 0;
+    }
+
+    private function getDbWhereColType($key)
+    {
+        switch ($this->colsName[$key]['type']) {
+            case 'int':
+                return DbWhereColumnType::Integer;
+            case 'string':
+                return DbWhereColumnType::String;
+            case 'boolean':
+                return DbWhereColumnType::Boolean;
+            case 'date':
+                return DbWhereColumnType::String;
+        }
+        return DbWhereColumnType::String;
     }
 
 }

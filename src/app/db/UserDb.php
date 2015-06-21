@@ -12,7 +12,7 @@ class UserDb extends DbTable
 		parent::__construct($db);
 		$this->tableName = 'user';
 		$this->idColName = 'User_Id';
-        $this->cols = array(
+        $this->colsName = array(
             array('name' => 'User_Id'),
             array('name' => 'User_Username'),
             array('name' => 'User_Password'),
