@@ -28,15 +28,15 @@ CREATE TABLE log (
 DROP TABLE IF EXISTS user;
 
 CREATE TABLE user (
-  User_Id INT unsigned NOT NULL auto_increment, PRIMARY KEY (User_Id),
-  User_Username CHAR(32) NOT NULL DEFAULT '',
-  User_Password CHAR(40) NOT NULL DEFAULT '',
-  User_DisplayName VARCHAR(128) NOT NULL DEFAULT '',
-  User_Level TINYINT NOT NULL DEFAULT 0
+  id INT unsigned NOT NULL auto_increment, PRIMARY KEY (id),
+  username CHAR(32) NOT NULL DEFAULT '',
+  password CHAR(40) NOT NULL DEFAULT '',
+  displayName VARCHAR(128) NOT NULL DEFAULT '',
+  level TINYINT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO user SET User_Username = 'peter', User_Password = SHA('peter'), User_DisplayName = 'Ken', User_Level = 2;
-INSERT INTO user SET User_Username = 'admin', User_Password = SHA('admin'), User_DisplayName = 'Admin', User_Level = 1;
+INSERT INTO user SET username = 'peter', password = SHA('peter'), displayName = 'Ken', level = 2;
+INSERT INTO user SET username = 'admin', password = SHA('admin'), displayName = 'Admin', level = 1;
 
 
 -- Log2 --

@@ -3,6 +3,8 @@
 namespace lib\framework\db\statement;
 
 
+use lib\framework\db\DbCondition;
+
 class SelectStatement
 {
     private $tables = array();
@@ -33,5 +35,17 @@ class SelectStatement
     public function getSelectAttributes()
     {
         return $this->selectAttributes;
+    }
+
+    private $conditions = array();
+
+    public function addCondition(DbCondition $condition)
+    {
+        array_push($this->conditions, $condition);
+    }
+
+    public function getConditions()
+    {
+        return $this->conditions;
     }
 } 
