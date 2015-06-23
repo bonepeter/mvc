@@ -2,7 +2,7 @@
 
 namespace app\db;
 
-use lib\framework\Db;
+use lib\framework\MysqlDb;
 use lib\framework\DbWhereColumns;
 use lib\framework\DbWhereColumnType;
 
@@ -23,7 +23,7 @@ abstract class DbTable {
 
     protected $sqlSortBy = '';
 
-    public function __construct(Db $db) {
+    public function __construct(MysqlDb $db) {
         $this->db = $db;
         $this->data = array();
     }

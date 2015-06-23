@@ -4,7 +4,7 @@ namespace unitTest\lib\framework;
 
 require_once __DIR__ . '/../../../src/lib/framework/autoLoader.php';
 
-use lib\framework\Db;
+use lib\framework\MysqlDb;
 use lib\framework\DbWhereCol;
 use lib\framework\DbWhereColumnType;
 use lib\framework\DbWhereColumns;
@@ -37,7 +37,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $dbh->exec("CREATE TABLE table1 ( id INTEGER PRIMARY KEY, title TEXT, message TEXT)");
         $dbh->exec("INSERT INTO table1 ('title', 'message') VALUES ('t1', 'm1');");
         $dbh->exec("INSERT INTO table1 ('title', 'message') VALUES ('t2', 'm2');");
-        return new Db($dbh);
+        return new MysqlDb($dbh);
     }
 
     public function test_Select_BadTable()

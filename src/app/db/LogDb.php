@@ -2,11 +2,11 @@
 
 namespace app\db;
 
-use lib\framework\Db;
+use lib\framework\MysqlDb;
 
 class LogDb extends DbTable
 {
-    public function __construct(Db $db)
+    public function __construct(MysqlDb $db)
     {
         parent::__construct($db);
         $this->tableName = 'log';

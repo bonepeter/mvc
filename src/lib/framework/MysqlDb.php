@@ -5,7 +5,7 @@ namespace lib\framework;
 use \PDO;
 use lib\framework\exception\DbCannotUpdateException;
 
-class Db {
+class MysqlDb {
 
     private $dbh = null;
 

@@ -17,7 +17,7 @@ class Helper
     public static function createDb($host, $user, $pass, $dbName)
     {
         $pdo = Helper::createMysqlPdo($host, $user, $pass, $dbName);
-        $db = new Db($pdo);
+        $db = new MysqlDb($pdo);
         return $db;
     }
 

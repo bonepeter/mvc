@@ -2,12 +2,12 @@
 
 namespace app\db;
 
-use lib\framework\Db;
+use lib\framework\MysqlDb;
 use lib\framework\DbWhereColumns;
 
 class UserDb extends DbTable
 {
-	public function __construct(Db $db)
+	public function __construct(MysqlDb $db)
     {
 		parent::__construct($db);
 		$this->tableName = 'user';
