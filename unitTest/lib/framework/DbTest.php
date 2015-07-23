@@ -2,6 +2,8 @@
 
 namespace unitTest\lib\framework;
 
+//TODO: this file should be remove later
+
 require_once __DIR__ . '/../../../src/lib/framework/autoLoader.php';
 
 use lib\framework\MysqlDb;

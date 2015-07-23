@@ -11,9 +11,19 @@ class DbCondition
      */
     private $column;
 
-    public function getColumn()
+    public function getColumnName()
     {
-        return $this->column;
+        return $this->column->getName();
+    }
+
+    public function getColumnDbType()
+    {
+        return $this->column->getType();
+    }
+
+    public function getColumnPlaceHolder()
+    {
+        return $this->column->getPlaceHolder();
     }
 
     /**
@@ -21,9 +31,9 @@ class DbCondition
      */
     private $adt;
 
-    public function getAdt()
+    public function getValue()
     {
-        return $this->adt;
+        return $this->adt->getValue();
     }
 
     private $op;
@@ -33,7 +43,7 @@ class DbCondition
         return $this->op;
     }
 
-    function __construct($column, $adt, $op = '=')
+    function __construct(DbColumn $column, Adt $adt, $op = '=')
     {
         $this->column = $column;
         $this->adt = $adt;

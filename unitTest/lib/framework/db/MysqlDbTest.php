@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../../../src/lib/framework/autoLoader.php';
 use lib\framework\adt\TextAdt;
 use lib\framework\db\DbColumn;
 use lib\framework\db\DbCondition;
+use lib\framework\db\MysqlDbColumn;
 use \PDO;
 use lib\framework\db\MysqlDb;
 use lib\framework\db\statement\SelectStatement;
@@ -44,7 +45,7 @@ class MysqlDbTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $result[0]['col']);
     }
 
-    public function test_Select_OnlyTable()
+    public function test_Select_EmptyTable()
     {
         $this->mysqlExec("TRUNCATE user;");
 
@@ -54,7 +55,21 @@ class MysqlDbTest extends \PHPUnit_Framework_TestCase
 
         $result = $db->runSelect($statement);
 
-        $this->assertEquals('0', count($result));
+        $this->assertEquals(0, count($result));
+    }
+
+    public function test_Select_OnlyTable()
+    {
+        $this->mysqlExec("TRUNCATE user;");
+        $this->mysqlExec("INSERT INTO user SET username='u1';");
+
+        $db = $this->createMysqlDb();
+        $statement = new SelectStatement();
+        $statement->addTable('user');
+
+        $result = $db->runSelect($statement);
+
+        $this->assertEquals(1, count($result));
     }
 
     private function mysqlExec($sql)
@@ -70,13 +85,28 @@ class MysqlDbTest extends \PHPUnit_Framework_TestCase
         $db = $this->createMysqlDb();
         $statement = new SelectStatement();
         $statement->addTable('user');
-        $statement->addCondition(New DbCondition(new DbColumn('username', 'char'), New TextAdt('u1')));
+        $statement->addCondition(New DbCondition(new MysqlDbColumn('username', 'string'), New TextAdt('u1')));
 
         $result = $db->runSelect($statement);
 
-        $this->assertEquals('1', count($result));
+        $this->assertEquals(1, count($result), 'Wrong number of records');
+        $this->assertEquals('u1', $result[0]['username']);
     }
 
+    public function test_Select_ConstantCondition()
+    {
+        $this->mysqlExec("TRUNCATE user; INSERT INTO user SET username='u1'; INSERT INTO user SET username='u2';");
 
+        $db = $this->createMysqlDb();
+        $statement = new SelectStatement();
+        $statement->addTable('user');
+        $statement->addCondition(New DbCondition(new MysqlDbColumn('username', 'constant'), New TextAdt('u2')));
+
+        $result = $db->runSelect($statement);
+
+        $this->assertEquals(1, count($result), 'Wrong number of records');
+        $this->assertEquals('u2', $result[0]['username']);
+
+    }
 }
  
