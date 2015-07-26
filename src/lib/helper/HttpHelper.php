@@ -18,6 +18,20 @@ class HttpHelper
         return '';
     }
 
+    public static function getParameters($method = 'get')
+    {
+        if ($method == 'get')
+        {
+            $parameters = array();
+            parse_str($_SERVER['QUERY_STRING'], $parameters);
+            return $parameters;
+        }
+        else
+        {
+            return $_POST;
+        }
+    }
+
     public static function printlnErrorMessage($msg)
     {
         echo sprintf('<p style="color: red; font-weight: bold;">%s</p>', $msg);

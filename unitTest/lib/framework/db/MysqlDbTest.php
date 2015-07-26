@@ -5,7 +5,6 @@ namespace unitTest\lib\framework\db;
 require_once __DIR__ . '/../../../../src/lib/framework/autoLoader.php';
 
 use lib\framework\adt\TextAdt;
-use lib\framework\db\DbColumn;
 use lib\framework\db\DbCondition;
 use lib\framework\db\MysqlDbColumn;
 use \PDO;
@@ -108,5 +107,7 @@ class MysqlDbTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('u2', $result[0]['username']);
 
     }
+
+
 }
  

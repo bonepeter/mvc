@@ -19,7 +19,8 @@ class AutoLoader
     {
         $phpFile = str_replace('\\', DIRECTORY_SEPARATOR, $className);
         $requirePath = __DIR__ . '/../../' . $phpFile . '.php';
-        if (is_readable($requirePath)) {
+        if (is_readable($requirePath))
+        {
             require_once $requirePath;
         }
     }
